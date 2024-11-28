@@ -28,10 +28,11 @@ en_sin_espacios(contenido)"""
 count=0
 file= open('test_pr2.txt','r')
 for line in file:
-    _en_= re.findall('(\sen\s)',line)
-    #en_ = re.findall("(\s+en\s)", line)
-    count +=len(_en_) #+len(en_)
-
+    lista = line.lower().split(" ")
+    for i in lista:
+        if i == "en":
+            count+=1
 
 file.close()
 print(count)
+
