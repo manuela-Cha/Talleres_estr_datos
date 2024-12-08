@@ -64,9 +64,9 @@ class Usuario:
         direccion = input("Dirección: ")
         
         usuario = Usuario(nombre, id_usuario, fecha_nacimiento, ciudad_de_nacimiento, telefono, email, direccion)
-        print(usuario)
+        return usuario
 
     def __str__(self):
-        return f"\nNombre={self.__nombre}\nId={self.__Id}\nFecha_nacimiento={self.__fecha_nacimiento}\nCiudad_de_nacimiento={self.__ciudad_nacimiento}\nTelefono={self.__tel}\nEmail={self.__email}\nDireccion={self.__dir}"
+        return f"{self.__nombre} {self.__Id} {self.__fecha_nacimiento} {self.__ciudad_nacimiento} {self.__tel} {self.__email} {self.__dir}\n"
 
 
