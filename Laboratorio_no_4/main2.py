@@ -26,7 +26,6 @@ for i in lista_nodos:
     coleccion2.addLast(i)
 print(coleccion2)
 
-
 nuevo_usuario_principio = Usuario.solicitar()
 coleccion2.addFirst(nuevo_usuario_principio)
 print(coleccion2)
@@ -36,18 +35,6 @@ coleccion2.addLast(nuevo_usuario_final)
 print(coleccion2)
 
 nuevo_usuario_cuarto_nodo = DoubleNode(Usuario.solicitar())
-index = 3
-temporal = coleccion2.head
-i = 0
-while temporal and i < index:
-    temporal = temporal.next
-    i += 1
-if temporal:
-    coleccion2.addBefore(temporal, nuevo_usuario_cuarto_nodo)
-    print(coleccion2)
-else:
-    print("Índice fuera de rango.")
 
-
-
-
+coleccion2.addBefore(coleccion2.obtener_nodo_en_posicion(3),nuevo_usuario_cuarto_nodo)
+print(coleccion2)

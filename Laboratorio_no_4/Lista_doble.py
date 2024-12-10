@@ -1,6 +1,5 @@
 from Laboratorio_no_4.Nodo_doble import DoubleNode
 
-
 class DoubleList:
     def __init__(self):
         self.head = None
@@ -108,6 +107,16 @@ class DoubleList:
                 return temporal
             temporal = temporal.next
         return None
+    
+    def obtener_nodo_en_posicion(self, posicion):
+        if posicion < 0 or posicion >= self.size:
+            return None
+
+        nodo_actual = self.head
+        for _ in range(posicion):
+            nodo_actual = nodo_actual.next
+
+        return nodo_actual
 
     def __str__(self):
         temp = self.head
