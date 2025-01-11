@@ -1,55 +1,55 @@
 class Usuario:
     def __init__(self, nombre, Id, fecha_nacimiento, ciudad_nacimiento, tel, email, dir):
-        self.__nombre = nombre
-        self.__Id = Id
-        self.__fecha_nacimiento = fecha_nacimiento
-        self.__ciudad_nacimiento = ciudad_nacimiento
-        self.__tel = tel
-        self.__email = email
-        self.__dir = dir 
+        self.nombre = nombre
+        self.Id = Id
+        self.fecha_nacimiento = fecha_nacimiento
+        self.ciudad_nacimiento = ciudad_nacimiento
+        self.tel = tel
+        self.email = email
+        self.dir = dir 
 
     def setNombre(self, nombre):
-        self.__nombre = nombre
+        self.nombre = nombre
 
     def setId(self, Id):
-        self.__Id = Id
+        self.Id = Id
 
     def setFecha_nacimiento(self, f):
-        self.__fecha_nacimiento = f
+        self.fecha_nacimiento = f
 
     def setCiudad_nacimiento(self, c):
-        self.__ciudad_nacimiento = c
+        self.ciudad_nacimiento = c
     
     def setTel(self, t):
-        self.__tel = t
+        self.tel = t
 
     def setEmail(self, e):
-        self.__email = e
+        self.email = e
 
     def setDir(self, d):
-        self.__dir = d
+        self.dir = d
 
 
     def getNombre(self):
-        return self.__nombre
+        return self.nombre
 
     def getId(self):
-        return self.__Id
+        return self.Id
 
     def getFecha_nacimiento(self):
-        return self.__fecha_nacimiento
+        return self.fecha_nacimiento
 
     def getCiudad_nacimiento(self):
-        return self.__ciudad_nacimiento
+        return self.ciudad_nacimiento
     
     def getTel(self):
-        return self.__tel
+        return self.tel
 
     def getEmail(self):
-        return self.__email
+        return self.email
 
     def getDir(self):
-        return self.__dir
+        return self.dir
     
     @staticmethod
     def solicitar():
@@ -67,6 +67,6 @@ class Usuario:
         return usuario
 
     def __str__(self):
-        return f"{self.__nombre} {self.__Id} {self.__fecha_nacimiento} {self.__ciudad_nacimiento} {self.__tel} {self.__email} {self.__dir}\n"
+        return f"{self.nombre} {self.Id} {self.fecha_nacimiento} {self.ciudad_nacimiento} {self.tel} {self.email} {self.dir}\n"
 
 
