@@ -3,4 +3,4 @@ from Practica_1.intfz_grafica import intfz_grafica
 
 inicio = intfz_grafica
 
-inicio.validacion()
+inicio.investigador_o_admin()

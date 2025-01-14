@@ -1,4 +1,5 @@
 from Practica_1.Investigador import Investigador
+from Laboratorio_no_2.Usuario import Usuario
 
 class Administrador(Investigador):
     
@@ -13,8 +14,14 @@ class Administrador(Investigador):
         self.correo_electronico = correo_electronico
         self.direccion = direccion
 
+    "falta, que se ingrese el rol en el archivo password, si es investigador o admin"
     def registrar_nuevo_usuario():
-        return
+        try:
+            with open("Practica_1/prueba.txt", "a") as file:
+                usuario_agregado = Usuario.solicitar()
+                file.write("{} {}\n".format(usuario_agregado.getNombre(),usuario_agregado.getCiudad_nacimiento()))
+        except:
+            print("no se pudo escribir en prueba")
      
     def  cambiar_contraseña():
         return
