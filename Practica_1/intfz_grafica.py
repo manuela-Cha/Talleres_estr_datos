@@ -1,78 +1,118 @@
 from Practica_1.carga_archivos import carga
-from Practica_1.Administrador import Administrador
-from Laboratorio_no_2.Usuario import Usuario
-from Practica_1.Investigador import Investigador
 
 class intfz_grafica:
     usuario_actual = None
     contrasena_actual = None
-
-    @staticmethod
-    def validacion():
-        global usuario_actual, contrasena_actual
-        print("Bienvenido al inventario, digite su cédula y contraseña\n")
-        while True:
-            usuario = input("Cédula: ")
-            contraseña = input("Contraseña: ")
-        
-            try:
-                if carga.validacion_datos(usuario, contraseña):
-                    usuario_actual = usuario
-                    contrasena_actual = contraseña
-                    return usuario
-                else:
-                    print("Usuario y/o contraseña inválidos")
-            except FileNotFoundError:
-                print("Error: El archivo no existe.")
-                break
-
+    
     @staticmethod
     def investigador_o_admin():
-        rol = carga.investigador_o_admin_datos(intfz_grafica.validacion())
-        if rol == "investigador":
-            print("\nBienvenido investigador")
-            print("Seleccione la acción que desee realizar:")
-            print("1) Consultar inventario")
-            print("2) Solicitar agregar un nuevo equipo")
-            nombre, cedula, fecha_nacimiento, ciudad_nacimiento, tel, email, dir = carga.inicializador(usuario_actual) 
-            investigador = Investigador(contrasena_actual, nombre, cedula, fecha_nacimiento, ciudad_nacimiento, tel, email, dir)
-            try:
-                respuesta = input("Ingrese el número de la acción deseada: ")
-                if respuesta == "1":
-                    investigador.consultar_equipos()
-                elif respuesta == "2":
-                    investigador.solicitar_agregar_equipo()
-                else:
-                    print("Opción no válida.")
-            except ValueError:
-                print("Entrada inválida. Por favor, ingrese un número.")
+        while True:  
+            
+            cedula_ingresada = input("Ingrese su cédula: ").strip()
+            if not cedula_ingresada:
+                print("Cédula no válida. Por favor, intente de nuevo.")
+                continue
+            
+            contrasena_ingresada = input("Ingrese su contraseña: ").strip()
+            if not contrasena_ingresada:
+                print("Contraseña no válida. Por favor, intente de nuevo.")
+                continue
+            
+            if not carga.validacion_datos(cedula_ingresada, contrasena_ingresada):
+                print("Cédula o contraseña incorrectos. Intente nuevamente.")
+                continue
 
-        elif rol == "administrador":
-            print("\nBienvenido administrador")
-            print("Seleccione la acción que desee realizar:")
-            print("1) Consultar inventario")
-            print("2) Agregar un nuevo usuario")
-            print("3) Eliminar un usuario")
-            print("4) Cambiar una contraseña")
-            nombre, cedula, fecha_nacimiento, ciudad_nacimiento, tel, email, dir = carga.inicializador(usuario_actual) 
-            admin = Administrador(contrasena_actual, nombre, cedula, fecha_nacimiento, ciudad_nacimiento, tel, email, dir)
-            try:
-                respuesta = input("Ingrese el número de la acción deseada: ")
-                if respuesta == "2":
-                    admin.registrar_nuevo_usuario()
-                elif respuesta == "3":
-                    admin.eliminar_usuario()  
-                elif respuesta == "4":
-                    admin.cambiar_contrasena() 
-                else:
-                    print("Opción no válida.")
-            except ValueError:
-                print("Entrada inválida. Por favor, ingrese un número.")
-        else:
-            print("Rol no reconocido. Acceso denegado.")
+            rol = carga.investigador_o_admin_datos(cedula_ingresada)
+            
+            if rol == "investigador":
+                print("\nBienvenido investigador")
+               
+                nodo_actual = carga.lista_investigadores.first()
+                while nodo_actual:
+                    if nodo_actual.data.Id == str(cedula_ingresada):
+                        investigador = nodo_actual.data
+                        break 
+                    nodo_actual = nodo_actual.next
+                if investigador == None:
+                    print(f"No se encontró un investigador")
+                    continue 
+                
+                while True: 
+                    print("\nSeleccione la acción que desee realizar:")
+                    print("1) Consultar inventario")
+                    print("2) Solicitar agregar un nuevo equipo")
+                    print("3) generar txt inventario")
+                    print("4) generar txt solicitudes")
+                    print("5) Salir")
+                    
+                    try:
+                        respuesta = input("Ingrese el número de la acción deseada: ")
+                        if respuesta == "1":
+                            investigador.consultar_equipos() #LISTA
+                        elif respuesta == "2":
+                            investigador.solicitar_agregar_equipo() #LISTA
+                        elif respuesta == "3":
+                            investigador.escribir_inventario_en_txt() #LISTA
+                        elif respuesta == "4":
+                            investigador.escribir_solicitudes_en_txt()
+                        elif respuesta == "5":
+                            print("Saliendo del menú de investigador...")
+                            break  
+                        else:
+                            print("Opción no válida.")
+                    except ValueError:
+                        print("Entrada inválida. Por favor, ingrese un número.")
+            
+            elif rol == "administrador":
+                print("\nBienvenido administrador")
+                nodo_actual = carga.lista_administradores.first()
+                while nodo_actual:
+                    if nodo_actual.data.Id == str(cedula_ingresada):
+                        admin = nodo_actual.data
+                        break 
+                    nodo_actual = nodo_actual.next
+                if admin == None:
+                    print(f"No se encontró un investigador")
+                    continue
+                
+                while True: 
+                    print("\nSeleccione la acción que desee realizar:")
+                    print("1) Consultar inventario")
+                    print("2) Agregar un nuevo usuario")
+                    print("3) Eliminar un usuario")
+                    print("4) Cambiar una contraseña")
+                    print("5) Observar solicitudes")
+                    print("6) Salir")
+                    
+                    try:
+                        respuesta = input("Ingrese el número de la acción deseada: ")
+                        if respuesta == "1":
+                            admin.consultar_inventario()
+                        elif respuesta == "2":
+                            admin.registrar_nuevo_usuario()  # Lista
+                        elif respuesta == "3":
+                            admin.eliminar_usuario()  # Lista
+                        elif respuesta == "4":
+                            admin.cambiar_contrasena()  # Lista
+                        elif respuesta == "5":
+                            admin.visualizar_solicitudes_agregar() #LISTA
+                        elif respuesta == "6":
+                            print("Saliendo del menú de administrador...")
+                            break
+                        else:
+                            print("Opción no válida.")
+                    except ValueError:
+                        print("Entrada inválida. Por favor, ingrese un número.")
+            
+            else:
+                print("Rol no reconocido. Acceso denegado.")
+                continue  
+
+    
+    
+
+                    
+                    
+
 
             
-            
-
-
-        

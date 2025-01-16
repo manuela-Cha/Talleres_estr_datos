@@ -1,24 +1,25 @@
-#from Practica_1.Investigador import Investigador
 from Laboratorio_no_2.Usuario import Usuario
 from Practica_1.carga_archivos import carga
 from Laboratorio_no_4.Lista_doble import DoubleList
 from Practica_1.carga_archivos import carga
 from Practica_1.Investigador import Investigador
 from Practica_1.Equipo import Equipo
+from Laboratorio_no_2.Fecha import Fecha
+from Laboratorio_no_4.Nodo_doble import DoubleNode
 
 class Administrador(Usuario):
     
-    def __init__(self, contrasena, nombre, cedula, fecha_nacimiento, ciudad_nacimiento, telefono, correo_electronico, direccion):
+    def __init__(self, contrasena, nombre, Id, fecha_nacimiento, ciudad_nacimiento, telefono, correo_electronico, direccion):
         self.contrasena = contrasena
         self.nombre = nombre
-        self.cedula = cedula 
+        self.Id = Id
         self.fecha_nacimiento = fecha_nacimiento
         self.ciudad_nacimiento = ciudad_nacimiento
         self.telefono = telefono
         self.correo_electronico = correo_electronico
         self.direccion = direccion
 
-
+    #Linea de archivos siempre en la ultima linea sin saltos de linea LISTA
     def registrar_nuevo_usuario(self):
         usuario_agregado = Usuario.solicitar()
         try:
@@ -30,12 +31,12 @@ class Administrador(Usuario):
             print("No se pudo escribir en Password")
 
         try: 
-            with open("Practica_1/Empleados.txt", "a") as file: 
-                file.write("{} {} {} {} {} {}\n".format(usuario_agregado.getNombre(), usuario_agregado.getId(), usuario_agregado.getFecha_nacimiento(), usuario_agregado.getTel(), usuario_agregado.getEmail(), usuario_agregado.getDir()))      
+            with open("Practica_1/Empleados.txt", "a") as file1:
+                file1.write("{} {} {} {} {} {}\n".format(usuario_agregado.getNombre(), usuario_agregado.getId(), usuario_agregado.getFecha_nacimiento(), usuario_agregado.getTel(), usuario_agregado.getEmail(), usuario_agregado.getDir()))      
         except:
             print("No se pudo escribir en Empleados")
 
-
+    # LISTA
     def eliminar_usuario(self):
         cedula = input("Ingrese el número de cédula del usuario que desea eliminar: ")
         if carga.eliminar_usuario_Password_datos(cedula) and carga.eliminar_usuario_Empleados_datos(cedula):
@@ -44,8 +45,10 @@ class Administrador(Usuario):
         
         else:
             print("No se encontró un usuario con esta cédula.")
+            print(carga.eliminar_usuario_Empleados_datos)
             return False
-    
+        
+    #LISTA
     def cambiar_contrasena(self):
         cedula = input("Ingrese el número de cédula del usuario que desea cambiar su contraseña: ")
         nueva_contrasena = input("Ingrese la contraseña nueva: ")
@@ -72,71 +75,120 @@ class Administrador(Usuario):
             print("El archivo no existe.")
             return False
 
-   
-    def actualizar_control_cambio(self):
-        return
     
-    # FALTA PROBAR
-    def agregar_nuevo_equipo(self):
-        cedula_investigador = ""
-        contrasena_investigador = ""
-        nombre_equipo = ""
-        numero_placa = ""
-        fecha_compra = ""
-        valor_compra = ""
-        lista_solicitudes = DoubleList()
-        with open("Practica_1/solicitudes_agregar.txt", "a") as file:
-            nodo_actual = lista_solicitudes.first()
-            while nodo_actual:
-                datos = nodo_actual.data.split(" ") 
-                datos[0] = cedula_investigador
-                datos[1] = contrasena_investigador
-                datos[2] = nombre_equipo
-                datos[3] = numero_placa
-                datos[4] = fecha_compra
-                datos[5] = valor_compra
-                nodo_actual = nodo_actual.next
-        equipo = Equipo(nombre_equipo, numero_placa, fecha_compra, valor_compra)  
-        nombre,cedula_investigador,fecha_nacimiento,ciudad_nacimiento,tel,email,dir = carga.inicializador(cedula_investigador)
-        investigador = Investigador(contrasena_investigador,nombre, cedula_investigador, fecha_nacimiento, ciudad_nacimiento, tel, email, dir )
-        investigador.equipos.addLast(equipo)
-
-        with open("Practica_1/inventarioGeneral.txt", "r") as archivo:
-            lineas = archivo.readlines()
-
-        usuario_encontrado = False
-
-        for i, linea in enumerate(lineas):
-            datos = linea.strip().split(" ")
-            if datos[0] == investigador.nombre: 
-                nueva_linea = "Nueva información que deseas agregar\n".format(investigador.nombre, investigador.cedula, equipo.get_nombre(), equipo.get_numero_placa(), equipo.get_valor_compra()) 
-                lineas.insert(i + 1, nueva_linea)  
-                usuario_encontrado = True
-                break
-
-        if not usuario_encontrado:
-            print(f"Nombre no encontrado.")
-        else:
-            with open("Practica_1/inventarioGeneral.txt", "w") as archivo:
-                archivo.writelines(lineas)
-            print(f"Equipo agregado correctamente.")
+    def seleccionar_equipo(numero_placa=None):
+        lista_equipos_solicitados = DoubleList()
+        with open("Practica_1/solicitudes_agregar.txt", "r") as file:
+                lineas = file.readlines()
+                for linea in lineas:
+                    datos = linea.strip().split()
+                    equipo = Equipo(datos[2], datos[3], datos[4:7], datos[7])
+                    if equipo.get_numero_placa() == str(numero_placa):
+                        return equipo
+                    lista_equipos_solicitados.addLast(equipo)
+        if numero_placa == None:
+            return lista_equipos_solicitados
+        
+    def eliminar_lineas(archivo):
+        try:
+            with open(archivo, "r", encoding="utf-8") as file:
+                lineas = file.readlines()
+            lineas_actualizadas = [""]
+            with open(archivo, "w", encoding="utf-8") as file:
+                file.writelines(lineas_actualizadas)
+        except Exception as e:
+            print(f"Error al procesar el archivo: {e}")
 
         
-    
-    def revision_solicitudes_eliminacion_equipos(self):
-        return 
-    
-    def revision_solicitudes_eliminacion_equipos(self):
-        return
-    
-    def notificacion_respuesta_solicitud(self):
-        return
-    
-    def eliminar_equipo(self):
-        return 
-    
-    def agregar_equipo(self):
-        return
+            
+
+    def visualizar_solicitudes_agregar(self):
+        try:
+            with open("Practica_1/solicitudes_agregar.txt", "r") as file:
+                lineas = file.readlines()
+                for linea in lineas:
+                    datos = linea.strip().split()
+                    decision = input(f"{linea}\n¿Tomar decisión? (s/n): ").lower()
+                    if decision == "s":
+
+                        nodo_actual = carga.lista_investigadores_y_administradores.first()
+                        while nodo_actual:
+                            if nodo_actual.data.Id == str(datos[1]):
+                                nuevo_nodo = DoubleNode(Administrador.seleccionar_equipo(datos[3]))
+                                nodo_actual.data.equipos.addLast(nuevo_nodo)
+                                nodo_actual.data.solicitudes["agregar_equipo: {}".format(datos[3])] = 'aprobada'
+                                break
+                            nodo_actual = nodo_actual.next
+                        
+                        nodo_actual = carga.lista_investigadores.first()
+                        while nodo_actual:
+                            if nodo_actual.data.Id == str(datos[1]):
+                                nuevo_nodo = DoubleNode(Administrador.seleccionar_equipo(datos[3]))
+                                nodo_actual.data.equipos.addLast(nuevo_nodo)
+                                nodo_actual.data.solicitudes["agregar_equipo: {}".format(datos[3])] = 'aprobada'
+                                break
+                            nodo_actual = nodo_actual.next
+                        try:
+                            with open("Practica_1/Control_de_cambios.txt", "a") as file:
+                                file.write("{} {} {}\n".format(datos[1], datos[3], "agregar", datos[4])) 
+                                print( "escrito exitosamente en el control de cambios")
+                        except:
+                            print("No se pudo escribir en control de cambios el agregar")
+                    else:
+                        nodo_actual = carga.lista_investigadores.first()
+                        while nodo_actual:
+                            if nodo_actual.data.Id == str(datos[1]):
+                                nodo_actual.data.solicitudes["agregar_equipo: {}".format(datos[3])] = 'rechazada'
+                                break
+                            nodo_actual = nodo_actual.next
+                Administrador.eliminar_lineas("Practica_1/solicitudes_agregar.txt")
+        except FileNotFoundError:
+            print("Error: El archivo no existe.")
+
+
+    """def visualizar_solicitudes_eliminar(self):
+        try:
+            with open("Practica_1/solicitudes_eliminar.txt", "r") as file:
+                lineas = file.readlines()
+                for linea in lineas:
+                    datos = linea.strip().split()
+                    decision = input(f"{linea}\n¿Tomar decisión? (s/n): ").lower()
+                    if decision == "s":
+                        investigador = carga.obtener_investigadores(datos[1]).first().getData()
+                        investigador.eliminar_equipo(str(datos[3]))
+                    
+                        solicitudes = carga.obtener_investigadores(datos[1]).first().getData().getSolicitudes()
+                        solicitudes["eliminar_equipo: {}".format(datos[3])] = 'aprobada'
+                        
+                        nodo_actual = carga.lista_investigadores_y_administradores.first()
+                        print("nodo actual", nodo_actual)
+                        while nodo_actual:
+                            if nodo_actual.data.Id == str(datos[1]):
+                                nuevo_nodo = DoubleNode(Administrador.seleccionar_equipo(datos[3]))
+                                nodo_actual.data.equipos.addLast(nuevo_nodo)
+                                nodo_actual.data.solicitudes["agregar_equipo: {}".format(datos[3])] = 'aprobada'
+                                break
+                            nodo_actual = nodo_actual.next
+                        
+                        nodo_actual = carga.lista_investigadores.first()
+                        while nodo_actual:
+                            if nodo_actual.data.Id == str(datos[1]):
+                                nuevo_nodo = DoubleNode(Administrador.seleccionar_equipo(datos[3]))
+                                nodo_actual.data.equipos.addLast(nuevo_nodo)
+                                nodo_actual.data.solicitudes["agregar_equipo: {}".format(datos[3])] = 'aprobada'
+                                break
+                            nodo_actual = nodo_actual.next
+
+                        try:
+                            with open("Practica_1/Control_de_cambios.txt", "a") as file:
+                                file.write("{} {} {}\n".format(datos[1], datos[3], "eliminar", datos[4])) 
+                                print( "escrito exitosamente en el control de cambios")
+                        except:
+                            print("No se pudo escribir en control de cambios el agregar")
+                    else:
+                        investigador.solicitudes["eliminar_equipo: {}".format(datos[1])] = 'rechazada'
+        except FileNotFoundError:
+            print("Error: El archivo no existe.")"""
     
     def generar_txt_inventario_investigador(self, id_investigador):
         return
@@ -154,4 +206,4 @@ class Administrador(Usuario):
         return
     
     def __str__(self):
-        return f"{self.nombre} {self.fecha_nacimiento} {self.ciudad_nacimiento} {self.telefono} {self.correo_electronico} {self.direccion}\n"
+        return f"{self.nombre} {self.Id} {self.fecha_nacimiento} {self.ciudad_nacimiento} {self.telefono} {self.correo_electronico} {self.direccion}\n"

@@ -23,4 +23,4 @@ class Fecha:
         return self.aa
     
     def __str__(self):
-        return "{}-{}-{}".format(self.dd,self.mm,self.aa)
+        return "{} {} {}".format(self.dd,self.mm,self.aa)

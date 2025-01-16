@@ -1,3 +1,4 @@
+from Laboratorio_no_2.Fecha import Fecha
 class Usuario:
     def __init__(self, nombre, Id, fecha_nacimiento, ciudad_nacimiento, tel, email, dir):
         self.nombre = nombre
@@ -57,12 +58,14 @@ class Usuario:
         
         nombre = input("Nombre: ")
         id_usuario = input("ID: ")
-        fecha_nacimiento = input("Fecha de nacimiento: ")
+        dia_nacimiento = input("Ingrese el dia en que nació: ")
+        mes_nacimiento = input("Ingrese la fecha en que nació: ")
+        anio_nacimiento = input("Ingrese el año en que nació: ")
         ciudad_de_nacimiento = input("Ciudad donde nació: ")
         telefono = input("Teléfono: ")
         email = input("Email: ")
         direccion = input("Dirección: ")
-        
+        fecha_nacimiento = Fecha(dia_nacimiento,mes_nacimiento,anio_nacimiento)
         usuario = Usuario(nombre, id_usuario, fecha_nacimiento, ciudad_de_nacimiento, telefono, email, direccion)
         return usuario
 
