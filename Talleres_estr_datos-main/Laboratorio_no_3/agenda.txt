@@ -1,0 +1,5 @@
+manu, 1, 1990-01-01, Medellin, 123456789, manu@unal.com, Calle 123
+javier, 2, 2022-05-15, Bogota, 987654321, javier@unal.com, Avenida 456
+karla, 3, 2003-09-10, Cali, 456789123, karla@unal.com, Calle Falsa 789
+carolina, 4, 2005-03-20, Barranquilla, 789123456, carolina@unal.com, unidad 101
+alejanda, 5, 1994-07-25, Pereira, 321654987, aleja@unal.com, Barrio 742
