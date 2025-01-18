@@ -1,7 +1,6 @@
 from Laboratorio_no_2.Usuario import Usuario
 from Practica_1.carga_archivos import carga
 from Laboratorio_no_4.Lista_doble import DoubleList
-from Practica_1.carga_archivos import carga
 from Practica_1.Investigador import Investigador
 from Practica_1.Equipo import Equipo
 from Laboratorio_no_2.Fecha import Fecha
@@ -190,10 +189,28 @@ class Administrador(Usuario):
         except FileNotFoundError:
             print("Error: El archivo no existe.")"""
     
-    def generar_txt_inventario_investigador(self, id_investigador):
+    def generar_txt_inventario_investigador(self):
+        id_investigador = input("Ingrese la cedula del investigador: ")
+        nodo_actual = carga.lista_investigadores.first()
+        while nodo_actual:
+            if nodo_actual.data.Id == str(id_investigador):
+                ruta_archivo = "{}-desdeAdmin.txt".format(nodo_actual.data.getNombre())
+                with open(ruta_archivo, "w", encoding="utf-8") as archivo:    
+                    archivo.write(str(nodo_actual.data.equipos))
+                break
+            nodo_actual = nodo_actual.next
         return
     
     def generar_txt_inventario_general(self ):
+        id_investigador = input("Ingrese la cedula del investigador: ")
+        nodo_actual = carga.lista_investigadores.first()
+        while nodo_actual:
+            if nodo_actual.data.Id == str(id_investigador):
+                ruta_archivo = "{}-desdeAdmin.txt".format(nodo_actual.data.getNombre())
+                with open(ruta_archivo, "w", encoding="utf-8") as archivo:    
+                    archivo.write(str(nodo_actual.data.equipos))
+                break
+            nodo_actual = nodo_actual.next
         return
     
     def generar_control_de_cambios(self):

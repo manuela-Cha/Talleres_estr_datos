@@ -43,7 +43,8 @@ class intfz_grafica:
                     print("2) Solicitar agregar un nuevo equipo")
                     print("3) generar txt inventario")
                     print("4) generar txt solicitudes")
-                    print("5) Salir")
+                    print("5) consultar estado solicitudes")
+                    print("6) Salir")
                     
                     try:
                         respuesta = input("Ingrese el número de la acción deseada: ")
@@ -54,8 +55,10 @@ class intfz_grafica:
                         elif respuesta == "3":
                             investigador.escribir_inventario_en_txt() #LISTA
                         elif respuesta == "4":
-                            investigador.escribir_solicitudes_en_txt()
+                            investigador.escribir_solicitudes_en_txt() #LISTA
                         elif respuesta == "5":
+                            investigador.consultar_estado_solicitudes() #LISTA
+                        elif respuesta == "6":
                             print("Saliendo del menú de investigador...")
                             break  
                         else:
@@ -77,25 +80,25 @@ class intfz_grafica:
                 
                 while True: 
                     print("\nSeleccione la acción que desee realizar:")
-                    print("1) Consultar inventario")
-                    print("2) Agregar un nuevo usuario")
-                    print("3) Eliminar un usuario")
-                    print("4) Cambiar una contraseña")
-                    print("5) Observar solicitudes")
+                    print("1) Agregar un nuevo usuario")
+                    print("2) Eliminar un usuario")
+                    print("3) Cambiar una contraseña")
+                    print("4) Observar solicitudes")
+                    print("5) Generar txt investigador dado")
                     print("6) Salir")
                     
                     try:
                         respuesta = input("Ingrese el número de la acción deseada: ")
                         if respuesta == "1":
-                            admin.consultar_inventario()
-                        elif respuesta == "2":
                             admin.registrar_nuevo_usuario()  # Lista
-                        elif respuesta == "3":
+                        elif respuesta == "2":
                             admin.eliminar_usuario()  # Lista
-                        elif respuesta == "4":
+                        elif respuesta == "3":
                             admin.cambiar_contrasena()  # Lista
-                        elif respuesta == "5":
+                        elif respuesta == "4":
                             admin.visualizar_solicitudes_agregar() #LISTA
+                        elif respuesta == "5":
+                            admin.generar_txt_inventario_investigador()
                         elif respuesta == "6":
                             print("Saliendo del menú de administrador...")
                             break

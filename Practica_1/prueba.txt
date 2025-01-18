@@ -1,2 +1,0 @@
-<bound method Usuario.getNombre of <Laboratorio_no_2.Usuario.Usuario object at 0x000001BBBFB6DBE0>>, <bound method Usuario.getCiudad_nacimiento of <Laboratorio_no_2.Usuario.Usuario object at 0x000001BBBFB6DBE0>>lolll, lolllllllllll, llllllllll
-l, a

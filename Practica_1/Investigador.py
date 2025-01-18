@@ -49,15 +49,15 @@ class Investigador(Usuario):
     def solicitar_eliminar_equipo(self):
         numero_placa_eliminar = input("Escriba el numero de placa del equipo que desea eliminar")
         nodo_actual = self.equipos.first()
-        encontrado = False  # Bandera para verificar si se encontró el objeto
+        encontrado = False 
 
         while nodo_actual is not None:
             if nodo_actual.get_numero_placa() == numero_placa_eliminar:
-                encontrado = True  # Marca como encontrado
-                break  # Sale del bucle si encuentra el objeto
+                encontrado = True  
+                break  
             nodo_actual = nodo_actual.next
 
-        # Si al final del recorrido no se encontró el objeto
+        
         if not encontrado:
             return "Equipo con número de placa no encontrado."
 
@@ -65,7 +65,7 @@ class Investigador(Usuario):
         while current_node is not None:
             if current_node.data.get_numero_placa() == numero_placa_eliminar:
                 with open("Practica_1/solicitudes_eliminar.txt", "a") as archivo:  
-                    archivo.write("{} {} {} {} {} {} {} {}".format(self.getNombre(), self.Id, current_node.data.get_nombre(), current_node.data.get_numero_placa(), current_node.data.get_fecha_compra().getDia(), current_node.data.get_fecha_compra().getMes(), current_node.data.get_fecha_compra().getAño(), current_node.data.get_valor_compra() ))
+                    archivo.write("{} {} {} {} {} {} {} {}\n".format(self.getNombre(), self.Id, current_node.data.get_nombre(), current_node.data.get_numero_placa(), current_node.data.get_fecha_compra().getDia(), current_node.data.get_fecha_compra().getMes(), current_node.data.get_fecha_compra().getAño(), current_node.data.get_valor_compra() ))
                     return True
             current_node = current_node.next
     
@@ -75,7 +75,7 @@ class Investigador(Usuario):
             objetos_unicos = set()
             nodo_actual = self.equipos.first()
             while nodo_actual:
-                objetos_unicos.add(str(nodo_actual.data))  # Convertimos el dato del nodo a string
+                objetos_unicos.add(str(nodo_actual.data))  
                 nodo_actual = nodo_actual.next
 
             with open(ruta_archivo, "w", encoding="utf-8") as archivo:
@@ -89,23 +89,14 @@ class Investigador(Usuario):
     def escribir_solicitudes_en_txt(self):
         ruta_archivo = "{}.txt".format(self.getNombre())
         try:
-            objetos_unicos = set()
-            nodo_actual = self.solicitudes.first()
-            while nodo_actual:
-                objetos_unicos.add(str(nodo_actual.data))  # Convertimos el dato del nodo a string
-                nodo_actual = nodo_actual.next
-
-            with open(ruta_archivo, "w", encoding="utf-8") as archivo:
-                for obj in objetos_unicos:
-                    archivo.write(obj + "\n")
-
-            print(f"Se escribieron {len(objetos_unicos)} objetos únicos en {ruta_archivo}")
+            with open(ruta_archivo, "w", encoding="utf-8") as archivo:    
+                archivo.write(str(self.solicitudes))
         except Exception as e:
             print(f"Error al escribir en el archivo: {e}")
+        
+    def consultar_estado_solicitudes(self):
+        print(self.solicitudes)
     
-    
-    def generar_txt_solicitudes():
-        return
     
     def __str__(self):
         return f"{self.nombre} {self.Id} {self.fecha_nacimiento} {self.ciudad_nacimiento} {self.tel} {self.email} {self.dir} {self.equipos} {self.solicitudes}\n"
