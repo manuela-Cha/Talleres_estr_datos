@@ -270,5 +270,6 @@ class carga:
                         break 
                     nodo_actual = nodo_actual.next
 
-
+    def inicializar_empleado():
+        return 
 
