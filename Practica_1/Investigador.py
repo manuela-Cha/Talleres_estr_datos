@@ -2,7 +2,6 @@
 from Laboratorio_no_2.Usuario import Usuario
 from Laboratorio_no_4.Lista_doble import DoubleList
 from Practica_1.Equipo import Equipo
-from Practica_1.carga_archivos import carga 
 
 class Investigador(Usuario):
     def __init__(self, contrasena, nombre, Id, fecha_nacimiento, ciudad_nacimiento, tel, email, dir):
@@ -34,10 +33,11 @@ class Investigador(Usuario):
 
     def consultar_equipos(self):
         print("Equipos: ")
-        nodo_actual = self.equipos.first() 
+        """nodo_actual = self.equipos.first() 
         while nodo_actual is not None:
             print(nodo_actual.data)
-            nodo_actual = nodo_actual.next
+            nodo_actual = nodo_actual.next"""
+        print(self.equipos)
          
     def solicitar_agregar_equipo(self):
         equipo = Equipo.crear_equipo()
@@ -47,7 +47,21 @@ class Investigador(Usuario):
             return True
     
     def solicitar_eliminar_equipo(self):
-        numero_placa_eliminar = input("Escriba el numero de placa del equipo que desea eliminar")
+        print(self.equipos)
+        numero_placa_eliminar = input("Escriba el numero de placa del equipo que desea eliminar: ")
+        nodo_actual = self.equipos.first()
+        
+        while nodo_actual:
+            if nodo_actual.data.get_numero_placa() == str(numero_placa_eliminar):
+                with open("Practica_1/solicitudes_eliminar.txt", "a") as archivo:  
+                    archivo.write("{} {} {} {} {} {} {} {}\n".format(self.getNombre(), self.Id, nodo_actual.data.get_nombre(), nodo_actual.data.get_numero_placa(), nodo_actual.data.get_fecha_compra().getDia(), nodo_actual.data.get_fecha_compra().getMes(), nodo_actual.data.get_fecha_compra().getAño(), nodo_actual.data.get_valor_compra() ))
+                    self.solicitudes["agregar_equipo: {}".format(nodo_actual.data.get_nombre())] = "Pendiente"
+                    bandera = True
+            nodo_actual = nodo_actual.next
+        if not bandera:
+            print("No hay un numero de placa en su inventario de  equipos que coincida con el dado")
+        
+        """numero_placa_eliminar = input("Escriba el numero de placa del equipo que desea eliminar")
         nodo_actual = self.equipos.first()
         encontrado = False 
 
@@ -67,7 +81,7 @@ class Investigador(Usuario):
                 with open("Practica_1/solicitudes_eliminar.txt", "a") as archivo:  
                     archivo.write("{} {} {} {} {} {} {} {}\n".format(self.getNombre(), self.Id, current_node.data.get_nombre(), current_node.data.get_numero_placa(), current_node.data.get_fecha_compra().getDia(), current_node.data.get_fecha_compra().getMes(), current_node.data.get_fecha_compra().getAño(), current_node.data.get_valor_compra() ))
                     return True
-            current_node = current_node.next
+            current_node = current_node.next"""
     
     def escribir_inventario_en_txt(self):
         ruta_archivo = "{}.txt".format(self.getNombre())
@@ -99,5 +113,5 @@ class Investigador(Usuario):
     
     
     def __str__(self):
-        return f"{self.nombre} {self.Id} {self.fecha_nacimiento} {self.ciudad_nacimiento} {self.tel} {self.email} {self.dir} {self.equipos} {self.solicitudes}\n"
+        return f"{self.nombre} {self.Id} {self.fecha_nacimiento} {self.ciudad_nacimiento} {self.tel} {self.email} {self.dir} {self.equipos} {self.solicitudes} {self.contrasena}\n"
     

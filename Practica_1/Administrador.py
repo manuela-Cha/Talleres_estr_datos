@@ -1,5 +1,4 @@
 from Laboratorio_no_2.Usuario import Usuario
-from Practica_1.carga_archivos import carga
 from Laboratorio_no_4.Lista_doble import DoubleList
 from Practica_1.Investigador import Investigador
 from Practica_1.Equipo import Equipo
@@ -8,18 +7,20 @@ from Laboratorio_no_4.Nodo_doble import DoubleNode
 
 class Administrador(Usuario):
     
-    def __init__(self, contrasena, nombre, Id, fecha_nacimiento, ciudad_nacimiento, telefono, correo_electronico, direccion):
+    def __init__(self, contrasena, nombre, Id, fecha_nacimiento, ciudad_nacimiento, tel, email, dir):
         self.contrasena = contrasena
         self.nombre = nombre
         self.Id = Id
         self.fecha_nacimiento = fecha_nacimiento
         self.ciudad_nacimiento = ciudad_nacimiento
-        self.telefono = telefono
-        self.correo_electronico = correo_electronico
-        self.direccion = direccion
+        self.tel = tel
+        self.email = email
+        self.dir = dir
+        self.equipos = DoubleList()
 
-    #Linea de archivos siempre en la ultima linea sin saltos de linea LISTA
+    #Linea de archivos siempre en la ultima linea sin saltos de linea LISTA A MAS NO PODER
     def registrar_nuevo_usuario(self):
+        from Practica_1.carga_archivos import carga
         usuario_agregado = Usuario.solicitar()
         try:
             with open("Practica_1/Password.txt", "a") as file:
@@ -34,21 +35,19 @@ class Administrador(Usuario):
                 file1.write("{} {} {} {} {} {}\n".format(usuario_agregado.getNombre(), usuario_agregado.getId(), usuario_agregado.getFecha_nacimiento(), usuario_agregado.getTel(), usuario_agregado.getEmail(), usuario_agregado.getDir()))      
         except:
             print("No se pudo escribir en Empleados")
+        carga.inicializar_empleado()
+        
 
-    # LISTA
+    # LISTA A MAS NO PODER
     def eliminar_usuario(self):
+        from Practica_1.carga_archivos import carga
         cedula = input("Ingrese el número de cédula del usuario que desea eliminar: ")
-        if carga.eliminar_usuario_Password_datos(cedula) and carga.eliminar_usuario_Empleados_datos(cedula):
-            print("El usuario ha sido eliminado.")
-            return True
+        carga.eliminar_usuario_Password_datos(cedula)
+        carga.eliminar_usuario_de_txt(cedula)
         
-        else:
-            print("No se encontró un usuario con esta cédula.")
-            print(carga.eliminar_usuario_Empleados_datos)
-            return False
-        
-    #LISTA
+    #LISTA A MAS NO PODER
     def cambiar_contrasena(self):
+        from Practica_1.carga_archivos import carga
         cedula = input("Ingrese el número de cédula del usuario que desea cambiar su contraseña: ")
         nueva_contrasena = input("Ingrese la contraseña nueva: ")
         try:
@@ -67,27 +66,46 @@ class Administrador(Usuario):
                 return False
             with open("Practica_1/Password.txt", "w") as archivo:
                 archivo.writelines(lineas)
-            print(f"La contraseña de {cedula} se ha actualizado correctamente.")
-            return True
-        
         except FileNotFoundError:
-            print("El archivo no existe.")
-            return False
+            print("El archivo no existe.")   
 
+        nodo_actual = carga.lista_investigadores_y_administradores.first()
+        while nodo_actual:
+            datos = nodo_actual.data
+            if datos.getId() == str(cedula):
+                nodo_actual.data.contrasena = nueva_contrasena
+                break
+            nodo_actual = nodo_actual.next
+
+        """nodo_actual = carga.lista_investigadores.first()
+        while nodo_actual:
+            datos = nodo_actual.data
+            if datos.getId() == str(cedula):
+                nodo_actual.data.contrasena = nueva_contrasena
+                break
+            nodo_actual = nodo_actual.next
+
+        nodo_actual = carga.lista_administradores.first()
+        while nodo_actual:
+            datos = nodo_actual.data
+            if datos.getId() == str(cedula):
+                nodo_actual.data.contrasena = nueva_contrasena
+                break
+            nodo_actual = nodo_actual.next"""
     
-    def seleccionar_equipo(numero_placa=None):
-        lista_equipos_solicitados = DoubleList()
+    
+    def crear_equipo_solicitado(numero_placa):
+        """Crea el objeto equipo solicitado y lo retorna"""
+        "lista_equipos_solicitados = DoubleList()"
         with open("Practica_1/solicitudes_agregar.txt", "r") as file:
                 lineas = file.readlines()
                 for linea in lineas:
                     datos = linea.strip().split()
-                    equipo = Equipo(datos[2], datos[3], datos[4:7], datos[7])
-                    if equipo.get_numero_placa() == str(numero_placa):
+                    if datos[3] == str(numero_placa):
+                        fecha = " ".join(datos[4:7])
+                        equipo = Equipo(datos[2], datos[3], fecha , datos[7])
                         return equipo
-                    lista_equipos_solicitados.addLast(equipo)
-        if numero_placa == None:
-            return lista_equipos_solicitados
-        
+                    
     def eliminar_lineas(archivo):
         try:
             with open(archivo, "r", encoding="utf-8") as file:
@@ -102,31 +120,26 @@ class Administrador(Usuario):
             
 
     def visualizar_solicitudes_agregar(self):
+        from Practica_1.carga_archivos import carga
         try:
             with open("Practica_1/solicitudes_agregar.txt", "r") as file:
                 lineas = file.readlines()
                 for linea in lineas:
                     datos = linea.strip().split()
+                    nombre_solicitante = datos[0]
+                    cedula_solicitante = datos[1]
+                    nombre_equipo = datos[2]
+                    numero_placa = datos[3]
+                    dia_compra = datos[4]
+                    mes_compra = datos[5]
+                    anio_compra = datos[6]
+                    valor_precio = datos[7]
+
                     decision = input(f"{linea}\n¿Tomar decisión? (s/n): ").lower()
                     if decision == "s":
-
-                        nodo_actual = carga.lista_investigadores_y_administradores.first()
-                        while nodo_actual:
-                            if nodo_actual.data.Id == str(datos[1]):
-                                nuevo_nodo = DoubleNode(Administrador.seleccionar_equipo(datos[3]))
-                                nodo_actual.data.equipos.addLast(nuevo_nodo)
-                                nodo_actual.data.solicitudes["agregar_equipo: {}".format(datos[3])] = 'aprobada'
-                                break
-                            nodo_actual = nodo_actual.next
-                        
-                        nodo_actual = carga.lista_investigadores.first()
-                        while nodo_actual:
-                            if nodo_actual.data.Id == str(datos[1]):
-                                nuevo_nodo = DoubleNode(Administrador.seleccionar_equipo(datos[3]))
-                                nodo_actual.data.equipos.addLast(nuevo_nodo)
-                                nodo_actual.data.solicitudes["agregar_equipo: {}".format(datos[3])] = 'aprobada'
-                                break
-                            nodo_actual = nodo_actual.next
+                        with open("Practica_1/InventarioGeneral.txt", "a") as archivo:  
+                            archivo.write("{} {} {} {} {} {} {} {}\n".format(nombre_solicitante, cedula_solicitante, nombre_equipo, numero_placa, dia_compra, mes_compra, anio_compra, valor_precio ))
+                        carga.carga_equipos_existentes()
                         try:
                             with open("Practica_1/Control_de_cambios.txt", "a") as file:
                                 file.write("{} {} {}\n".format(datos[1], datos[3], "agregar", datos[4])) 
@@ -145,51 +158,42 @@ class Administrador(Usuario):
             print("Error: El archivo no existe.")
 
 
-    """def visualizar_solicitudes_eliminar(self):
+    def visualizar_solicitudes_eliminar(self):
+        from Practica_1.carga_archivos import carga
         try:
             with open("Practica_1/solicitudes_eliminar.txt", "r") as file:
                 lineas = file.readlines()
                 for linea in lineas:
                     datos = linea.strip().split()
+                    numero_placa = datos[3]
                     decision = input(f"{linea}\n¿Tomar decisión? (s/n): ").lower()
                     if decision == "s":
-                        investigador = carga.obtener_investigadores(datos[1]).first().getData()
-                        investigador.eliminar_equipo(str(datos[3]))
-                    
-                        solicitudes = carga.obtener_investigadores(datos[1]).first().getData().getSolicitudes()
-                        solicitudes["eliminar_equipo: {}".format(datos[3])] = 'aprobada'
-                        
-                        nodo_actual = carga.lista_investigadores_y_administradores.first()
-                        print("nodo actual", nodo_actual)
-                        while nodo_actual:
-                            if nodo_actual.data.Id == str(datos[1]):
-                                nuevo_nodo = DoubleNode(Administrador.seleccionar_equipo(datos[3]))
-                                nodo_actual.data.equipos.addLast(nuevo_nodo)
-                                nodo_actual.data.solicitudes["agregar_equipo: {}".format(datos[3])] = 'aprobada'
-                                break
-                            nodo_actual = nodo_actual.next
-                        
+                        with open("Practica_1/InventarioGeneral.txt", "r") as file:
+                            lineas = file.readlines()
+                            nuevas_lineas = [linea for linea in lineas if linea.strip().split()[3] != str(numero_placa)]
+
+                        with open("Practica_1/InventarioGeneral.txt", "w") as file:
+                            file.writelines(nuevas_lineas)
+                        carga.carga_equipos_existentes()
+                        try:
+                            with open("Practica_1/Control_de_cambios.txt", "a") as file:
+                                file.write("{} {} {}\n".format(datos[1], datos[3], "Eliminar", datos[4])) 
+                                print( "escrito exitosamente en el control de cambios")
+                        except:
+                            print("No se pudo escribir en control de cambios el eliminar")
+                    else:
                         nodo_actual = carga.lista_investigadores.first()
                         while nodo_actual:
                             if nodo_actual.data.Id == str(datos[1]):
-                                nuevo_nodo = DoubleNode(Administrador.seleccionar_equipo(datos[3]))
-                                nodo_actual.data.equipos.addLast(nuevo_nodo)
-                                nodo_actual.data.solicitudes["agregar_equipo: {}".format(datos[3])] = 'aprobada'
+                                nodo_actual.data.solicitudes["eliminar_equipo: {}".format(datos[3])] = 'rechazada'
                                 break
                             nodo_actual = nodo_actual.next
-
-                        try:
-                            with open("Practica_1/Control_de_cambios.txt", "a") as file:
-                                file.write("{} {} {}\n".format(datos[1], datos[3], "eliminar", datos[4])) 
-                                print( "escrito exitosamente en el control de cambios")
-                        except:
-                            print("No se pudo escribir en control de cambios el agregar")
-                    else:
-                        investigador.solicitudes["eliminar_equipo: {}".format(datos[1])] = 'rechazada'
+                Administrador.eliminar_lineas("Practica_1/solicitudes_eliminar.txt")
         except FileNotFoundError:
-            print("Error: El archivo no existe.")"""
+            print("Error: El archivo no existe.")
     
     def generar_txt_inventario_investigador(self):
+        from Practica_1.carga_archivos import carga
         id_investigador = input("Ingrese la cedula del investigador: ")
         nodo_actual = carga.lista_investigadores.first()
         while nodo_actual:
@@ -202,6 +206,7 @@ class Administrador(Usuario):
         return
     
     def generar_txt_inventario_general(self ):
+        from Practica_1.carga_archivos import carga
         id_investigador = input("Ingrese la cedula del investigador: ")
         nodo_actual = carga.lista_investigadores.first()
         while nodo_actual:
@@ -213,6 +218,28 @@ class Administrador(Usuario):
             nodo_actual = nodo_actual.next
         return
     
+    def agregar_un_equipo_al_inventario(self):
+        """Agrega un equipo al inventario"""
+        from Practica_1.carga_archivos import carga
+        
+        nombre_solicitante = self.nombre
+        cedula_solicitante = self.Id
+        nombre_equipo = input("Nombre del equipo: ")
+        numero_placa = input("Numero de placa del equipo: ")
+        dia_compra = input("Día de compra del equipo: ")
+        mes_compra = input("Mes de compra del equipo: ")
+        anio_compra = input("Año de compra del equipo: ")
+        valor_precio = input("Precio del equipo: ")
+        
+        with open("Practica_1/InventarioGeneral.txt", "a") as archivo:  
+            archivo.write("{} {} {} {} {} {} {} {}\n".format(nombre_solicitante, cedula_solicitante, nombre_equipo, numero_placa, dia_compra, mes_compra, anio_compra, valor_precio ))
+        carga.carga_equipos_existentes()
+    
+    def mostrar_equipos(self):
+        print(self.equipos)
+        return
+
+
     def generar_control_de_cambios(self):
         return 
     
@@ -223,4 +250,4 @@ class Administrador(Usuario):
         return
     
     def __str__(self):
-        return f"{self.nombre} {self.Id} {self.fecha_nacimiento} {self.ciudad_nacimiento} {self.telefono} {self.correo_electronico} {self.direccion}\n"
+        return f"{self.nombre} {self.Id} {self.fecha_nacimiento} {self.ciudad_nacimiento} {self.tel} {self.email} {self.dir} {self.contrasena}\n"
