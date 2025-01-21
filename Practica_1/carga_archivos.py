@@ -1,69 +1,13 @@
 import re as re
 from Laboratorio_no_4.Lista_doble import DoubleList
-from Laboratorio_no_2.Usuario import Usuario
 from Practica_1.Administrador import Administrador
 from Practica_1.Investigador import Investigador
 from Laboratorio_no_2.Fecha import Fecha
-
+from Practica_1.Solicitud import Solicitud
 class carga:
     lista_investigadores_y_administradores = DoubleList()
     lista_investigadores = DoubleList()
     lista_administradores = DoubleList()
-    dic_Equipos = {}
-
-    
-    """Investigadores y admin ya existentes:"""
-    """obj1 = Investigador("j4an1980$", "Juan-Perez", "24567898", "12 10 1980", "Medellin", "3003233234", "juanperez@edl.edu.co", "kr74 4T-35 Boston Medellin null null")
-    obj2 = Investigador("d13go1979", "Diego-Palacio", "34568910", "20 12 1979", "Envigado", "3013234567", "diegopalacio@edl.edu.co", "Robledo Medellin Balcones-de-la-Quinta 405")
-    obj3 = Administrador("c4100l485Cal$", "Camila-Jimenez", "2345902", "15 09 1985", "Cali", "3003234567", "camilajimenez@edl.edu.co",  " tr45 4S-73 Poblado Medellin null null")
-    obj4 = Investigador("p3dr41990.$", "Pedro-Gomez", "1075689", "20 02 1990", "Popayan", "3003012323", "pedrogomez@edl.edu.co", "kr23 8-10 SanJuan Envigado Mirador 503")
-    obj5 = Investigador("r482novMed.", "Tatiana-Ramirez", "2345934", "15 11 1982", "Medellin", "3004567890", "tatianaramirez@edl.edu.co", "cll5 4S-69 Poblado Medellin UrbColina 1023")
-    
-    lista_investigadores_y_administradores.addLast(obj1)
-    lista_investigadores_y_administradores.addLast(obj2)
-    lista_investigadores_y_administradores.addLast(obj3)
-    lista_investigadores_y_administradores.addLast(obj4)
-    lista_investigadores_y_administradores.addLast(obj5)
-
-    lista_investigadores.addLast(obj1)
-    lista_investigadores.addLast(obj2)
-    lista_investigadores.addLast(obj4)
-    lista_investigadores.addLast(obj5)
-
-    lista_administradores.addLast(obj3)"""
-
-    """def cargar_Empleados_en_lista(cedula=None):
-        ruta_archivo = "Practica_1/Empleados.txt"
-        empleados_lista_doble = DoubleList()
-
-        try:
-            with open(ruta_archivo, "r", encoding="utf-8") as archivo:
-                for linea in archivo:
-                    datos = linea.strip().split(" ")
-
-                    if len(datos) < 8:
-                        continue
-
-                    nombre = datos[0]
-                    cedula_actual = datos[1]
-                    fecha_nacimiento = datos[2:5]
-                    ciudad_nacimiento = datos[5]
-                    tel = datos[6]
-                    email = datos[7]
-                    dir = datos[8:]
-
-                    usuario = Usuario(nombre, cedula_actual, fecha_nacimiento, ciudad_nacimiento, tel, email, dir)
-
-                    if cedula is None or str(cedula_actual) == str(cedula):
-                        empleados_lista_doble.addLast(usuario)
-
-        except FileNotFoundError:
-            print(f"El archivo en la ruta {ruta_archivo} no fue encontrado.")
-        except Exception as e:
-            print(f"Error al procesar el archivo: {e}")
-
-        return empleados_lista_doble"""
-
 
     def cargar_Password_en_lista():
         lista = DoubleList()
@@ -168,185 +112,12 @@ class carga:
 
                         
 
-    """def eliminar_usuario_Empleados_datos(cedula):
-        lista = DoubleList()
-        try:
-            with open("Practica_1/Empleados.txt", "r") as file:
-                for line in file:
-                    lista.addLast(line.strip())
-        except FileNotFoundError:
-            print(f"Archivo no encontrado")
-
-        nodo_actual = lista.first()
-        while nodo_actual:
-            datos = nodo_actual.data.split(" ")
-            if datos[1] == cedula:
-                lista.remove(nodo_actual)
-                carga.guardar_lista_en_archivo_empleados(lista)
-                return True
-            nodo_actual = nodo_actual.next
-        return False"""
-
-    """def obtener_administradores(cedula_buscar=None):
-        from Practica_1.Administrador import Administrador
-        administradores = DoubleList()
-
-        try:
-            ruta_password = "Practica_1/Password.txt"
-            roles = {}
-            with open(ruta_password, "r", encoding="utf-8") as archivo_password:
-                for linea in archivo_password:
-                    datos = linea.strip().split(" ")
-                    if len(datos) < 3:
-                        continue
-                    cedula = datos[0]
-                    rol = datos[2].lower()
-                    roles[cedula] = rol
-                    contrasena = datos[1]
-
-            ruta_empleados = "Practica_1/Empleados.txt"
-            with open(ruta_empleados, "r", encoding="utf-8") as archivo_empleados:
-                for linea in archivo_empleados:
-                    datos = linea.strip().split(" ")
-                    if len(datos) < 8:
-                        continue
-                    nombre = datos[0]
-                    cedula = datos[1]
-                    fecha_nacimiento = datos[2:5]
-                    ciudad_nacimiento = datos[5]
-                    tel = datos[6]
-                    email = datos[7]
-                    direccion = " ".join(datos[8:])
-
-                    if cedula in roles and roles[cedula] == "administrador":
-                        "contrasena = '...'"
-                        administrador = Administrador(
-                            contrasena, nombre, cedula, fecha_nacimiento,
-                            ciudad_nacimiento, tel, email, direccion
-                        )
-                        administradores.addLast(administrador)
-                        carga.lista_investigadores_y_administradores.addLast(administrador)
-                        carga.lista_administradores.addLast(administrador)  # Agregar a la lista combinada
-
-            if cedula_buscar:
-                resultado = DoubleList()
-                nodo_actual = administradores.first()
-                while nodo_actual:
-                    if nodo_actual.data.Id == str(cedula_buscar):
-                        resultado.addLast(nodo_actual.data)
-                        break
-                    nodo_actual = nodo_actual.next
-                return resultado
-
-        except Exception as e:
-            print(f"Error al procesar los archivos: {e}")
-
-        return administradores"""
-
-    """def obtener_investigadores(cedula_buscar=None):
-        from Practica_1.Investigador import Investigador
-        investigadores = DoubleList()
-
-        try:
-            ruta_password = "Practica_1/Password.txt"
-            roles = {}
-            with open(ruta_password, "r", encoding="utf-8") as archivo_password:
-                for linea in archivo_password:
-                    datos = linea.strip().split(" ")
-                    if len(datos) < 3:
-                        continue
-                    cedula = datos[0]
-                    rol = datos[2].lower()
-                    roles[cedula] = rol
-                    
-            ruta_empleados = "Practica_1/Empleados.txt"
-            with open(ruta_empleados, "r", encoding="utf-8") as archivo_empleados:
-                for linea in archivo_empleados:
-                    datos = linea.strip().split(" ")
-                    if len(datos) < 8:
-                        continue
-                    nombre = datos[0]
-                    cedula = datos[1]
-                    fecha_nacimiento = datos[2:5]
-                    ciudad_nacimiento = datos[5]
-                    tel = datos[6]
-                    email = datos[7]
-                    direccion = " ".join(datos[8:])
-                    contrasena = "..."
-
-                    if cedula in roles and roles[cedula] == "investigador":
-                        investigador = Investigador(
-                            contrasena, nombre, cedula, fecha_nacimiento,
-                            ciudad_nacimiento, tel, email, direccion
-                        )
-                        investigadores.addLast(investigador)
-                        carga.lista_investigadores_y_administradores.addLast(investigador)
-                        carga.lista_investigadores.addLast(investigador)  
-            
-            if cedula_buscar:
-                resultado = DoubleList()
-                nodo_actual = investigadores.first()
-                while nodo_actual:
-                    if nodo_actual.data.Id == str(cedula_buscar):
-                        resultado.addLast(nodo_actual.data)
-                        break
-                    nodo_actual = nodo_actual.next
-                return resultado
-
-        except Exception as e:
-            print(f"Error al procesar los archivos: {e}")
-
-        return investigadores"""
-    
-    """@staticmethod
-    def cuadrar_contraseñas_lista_completa():
-        ruta_password = "Practica_1/Password.txt"
-        with open(ruta_password, "r", encoding="utf-8") as archivo_password:
-            for linea in archivo_password:
-                datos = linea.strip().split(" ")
-                if len(datos) < 3:
-                    continue
-                nodo_actual = carga.lista_investigadores_y_administradores.first()
-                while nodo_actual:
-                    if nodo_actual.data.Id == datos[0]:
-                        nodo_actual.data.contrasena = datos[1]
-                        break
-                    nodo_actual = nodo_actual.next"""
-    
-    """def cuadrar_contraseñas_lista_investigadores():
-        ruta_password = "Practica_1/Password.txt"
-        with open(ruta_password, "r", encoding="utf-8") as archivo_password:
-            for linea in archivo_password:
-                datos = linea.strip().split(" ")
-                if len(datos) < 3:
-                    continue
-                nodo_actual = carga.lista_investigadores.first()
-                while nodo_actual:
-                    if nodo_actual.data.Id == datos[0]:
-                        nodo_actual.data.contrasena = datos[1]
-                        break 
-                    nodo_actual = nodo_actual.next
-
-    def cuadrar_contrseñas_lista_admins():
-        ruta_password = "Practica_1/Password.txt"
-        with open(ruta_password, "r", encoding="utf-8") as archivo_password:
-            for linea in archivo_password:
-                datos = linea.strip().split(" ")
-                if len(datos) < 3:
-                    continue
-                nodo_actual = carga.lista_administradores.first()
-                while nodo_actual:
-                    if nodo_actual.data.Id == datos[0]:
-                        nodo_actual.data.contrasena = datos[1]
-                        break 
-                    nodo_actual = nodo_actual.next"""
-
     def inicializar_empleado():
         from Practica_1.Administrador import Administrador
         from Practica_1.Investigador import Investigador
         """Inicializa el nuevo empleado y lo agrega a la lista correspondiente."""
         try:
-            # Lee la última línea del archivo Empleados.txt
+           
             with open("Practica_1/Empleados.txt", 'rb') as file:
                 file.seek(-2, 2)
                 while file.read(1) != b'\n': 
@@ -381,9 +152,6 @@ class carga:
                         else:
                             print("Rol del empleado no identificado")
                         return
-                print("desde inicializar empleado cedula en empleados: ", cedula) 
-                print("desde inicializar empleado cedula en password: ", datos[0]) 
-                print("Ninguna cédula coincide en los dos archivos.")
         except FileNotFoundError as e:
             print(f"Error: {e}")
 
@@ -452,24 +220,99 @@ class carga:
                             encontrado = True 
                         nodo_actual = nodo_actual.next
 
-                    """nodo_actual = carga.lista_investigadores.first()
-                    while nodo_actual:
-                        datos = nodo_actual.data
-                        if datos.getId() == str(cedula):
-                            nodo_actual.data.equipos.addLast(equipo)
-                            break
-                        nodo_actual = nodo_actual.next"""
-
-                    """nodo_actual = carga.lista_administradores.first()
-                    while nodo_actual:
-                        datos = nodo_actual.data
-                        if datos.getId() == str(cedula):
-                            nodo_actual.data.equipos.addLast(equipo)
-                            break
-                        nodo_actual = nodo_actual.next"""
-
         except FileNotFoundError as e:
                     print(f"Error: {e}")
+    
+    def carga_solicitudes_existentes():
+        """
+        Carga las solicitudes existentes siguiendo un orden específico:
+        1. Revisa solicitudes_agregar.txt
+        2. Si está vacío, revisa solicitudes_eliminar.txt
+        3. Si está vacío, revisa Control_de_cambios.txt
 
+        """
+        def esta_archivo_vacio(ruta_archivo):
+            
+            try:
+                with open(ruta_archivo, 'r', encoding='utf-8') as file:
+                    contenido = file.read().strip()
+                    return not bool(contenido)
+            except FileNotFoundError:
+                print(f"El archivo {ruta_archivo} no existe.")
+                return True
 
+        def procesar_solicitudes(ruta_archivo, tipo_solicitud):
+            
+            try:
+                with open(ruta_archivo, 'r', encoding='utf-8') as file:
+                    contenido = file.read().strip()
+                    if not contenido:  
+                        return
+                    
+                    file.seek(0)  
+                    for linea in file:
+                        linea = linea.strip()
+                        if not linea:  
+                            continue        
+                        datos = linea.split()
+                        if len(datos) < 4:  
+                            continue
+                        cedula = datos[1]
+                        numero_placa = datos[3]
+                        solicitud = Solicitud(tipo_solicitud, numero_placa, "pendiente")
+                        
+                        nodo_actual = carga.lista_investigadores_y_administradores.first()
+                        while nodo_actual:
+                            usuario = nodo_actual.data
+                            if usuario.getId() == cedula:
+                                usuario.solicitudes.addLast(solicitud)
+                                break
+                            nodo_actual = nodo_actual.next
+            except FileNotFoundError:
+                print(f"El archivo {ruta_archivo} no existe.")
+
+        def procesar_control_cambios():
+            try:
+                with open("Practica_1/Control_de_cambios.txt", 'r', encoding='utf-8') as file:
+                    contenido = file.read().strip()
+                    if not contenido: 
+                        return
+                        
+                    file.seek(0)  
+                    for linea in file:
+                        linea = linea.strip()
+                        if not linea: 
+                            continue
+                            
+                        datos = linea.split()
+                        if len(datos) < 8:  
+                            continue
+                            
+                        cedula = datos[0]
+                        numero_placa = datos[1]
+                        tipo_solicitud = datos[2]
+                        estado = datos[7]
+                        solicitud = Solicitud(tipo_solicitud, numero_placa, estado)
+                        
+                        
+                        nodo_actual = carga.lista_investigadores_y_administradores.first()
+                        while nodo_actual:
+                            usuario = nodo_actual.data
+                            if usuario.getId() == cedula:
+                                usuario.solicitudes.addLast(solicitud)
+                                break
+                            nodo_actual = nodo_actual.next
+            except FileNotFoundError:
+                print("El archivo Control_de_cambios.txt no existe.")
+
+        if not esta_archivo_vacio("Practica_1/solicitudes_agregar.txt"):
+            procesar_solicitudes("Practica_1/solicitudes_agregar.txt", "agregar")
         
+        else:
+            if not esta_archivo_vacio("Practica_1/solicitudes_eliminar.txt"):
+                procesar_solicitudes("Practica_1/solicitudes_eliminar.txt", "eliminar")
+            
+            else:
+                if not esta_archivo_vacio("Practica_1/Control_de_cambios.txt"):
+                    procesar_control_cambios()
+                

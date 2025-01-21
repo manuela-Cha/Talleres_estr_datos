@@ -14,7 +14,7 @@ class Investigador(Usuario):
         self.email = email
         self.dir = dir
         self.equipos = DoubleList()
-        self.solicitudes = {}
+        self.solicitudes = DoubleList()
 
     def getEquipos(self):
         return self.equipos
@@ -33,55 +33,29 @@ class Investigador(Usuario):
 
     def consultar_equipos(self):
         print("Equipos: ")
-        """nodo_actual = self.equipos.first() 
-        while nodo_actual is not None:
-            print(nodo_actual.data)
-            nodo_actual = nodo_actual.next"""
         print(self.equipos)
          
     def solicitar_agregar_equipo(self):
+        from Practica_1.carga_archivos import carga
         equipo = Equipo.crear_equipo()
         with open("Practica_1/solicitudes_agregar.txt", "a") as archivo:  
             archivo.write("{} {} {} {} {} {} {} {}\n".format(self.getNombre(), self.Id, equipo.get_nombre(), equipo.get_numero_placa(), equipo.get_fecha_compra().getDia(), equipo.get_fecha_compra().getMes(), equipo.get_fecha_compra().getAño(), equipo.get_valor_compra() ))
-            self.solicitudes["agregar_equipo: {}".format(equipo.get_nombre())] = "Pendiente"
-            return True
+        carga.carga_solicitudes_existentes()
     
     def solicitar_eliminar_equipo(self):
+        from Practica_1.carga_archivos import carga
         print(self.equipos)
         numero_placa_eliminar = input("Escriba el numero de placa del equipo que desea eliminar: ")
         nodo_actual = self.equipos.first()
-        
         while nodo_actual:
             if nodo_actual.data.get_numero_placa() == str(numero_placa_eliminar):
                 with open("Practica_1/solicitudes_eliminar.txt", "a") as archivo:  
                     archivo.write("{} {} {} {} {} {} {} {}\n".format(self.getNombre(), self.Id, nodo_actual.data.get_nombre(), nodo_actual.data.get_numero_placa(), nodo_actual.data.get_fecha_compra().getDia(), nodo_actual.data.get_fecha_compra().getMes(), nodo_actual.data.get_fecha_compra().getAño(), nodo_actual.data.get_valor_compra() ))
-                    self.solicitudes["agregar_equipo: {}".format(nodo_actual.data.get_nombre())] = "Pendiente"
                     bandera = True
             nodo_actual = nodo_actual.next
         if not bandera:
             print("No hay un numero de placa en su inventario de  equipos que coincida con el dado")
-        
-        """numero_placa_eliminar = input("Escriba el numero de placa del equipo que desea eliminar")
-        nodo_actual = self.equipos.first()
-        encontrado = False 
-
-        while nodo_actual is not None:
-            if nodo_actual.get_numero_placa() == numero_placa_eliminar:
-                encontrado = True  
-                break  
-            nodo_actual = nodo_actual.next
-
-        
-        if not encontrado:
-            return "Equipo con número de placa no encontrado."
-
-        current_node = self.equipos.first()  
-        while current_node is not None:
-            if current_node.data.get_numero_placa() == numero_placa_eliminar:
-                with open("Practica_1/solicitudes_eliminar.txt", "a") as archivo:  
-                    archivo.write("{} {} {} {} {} {} {} {}\n".format(self.getNombre(), self.Id, current_node.data.get_nombre(), current_node.data.get_numero_placa(), current_node.data.get_fecha_compra().getDia(), current_node.data.get_fecha_compra().getMes(), current_node.data.get_fecha_compra().getAño(), current_node.data.get_valor_compra() ))
-                    return True
-            current_node = current_node.next"""
+        carga.carga_solicitudes_existentes()
     
     def escribir_inventario_en_txt(self):
         ruta_archivo = "{}.txt".format(self.getNombre())
@@ -96,7 +70,6 @@ class Investigador(Usuario):
                 for obj in objetos_unicos:
                     archivo.write(obj + "\n")
 
-            print(f"Se escribieron {len(objetos_unicos)} objetos únicos en {ruta_archivo}")
         except Exception as e:
             print(f"Error al escribir en el archivo: {e}")
 

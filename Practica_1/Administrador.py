@@ -1,9 +1,7 @@
 from Laboratorio_no_2.Usuario import Usuario
 from Laboratorio_no_4.Lista_doble import DoubleList
-from Practica_1.Investigador import Investigador
 from Practica_1.Equipo import Equipo
-from Laboratorio_no_2.Fecha import Fecha
-from Laboratorio_no_4.Nodo_doble import DoubleNode
+from datetime import datetime
 
 class Administrador(Usuario):
     
@@ -18,7 +16,6 @@ class Administrador(Usuario):
         self.dir = dir
         self.equipos = DoubleList()
 
-    #Linea de archivos siempre en la ultima linea sin saltos de linea LISTA A MAS NO PODER
     def registrar_nuevo_usuario(self):
         from Practica_1.carga_archivos import carga
         usuario_agregado = Usuario.solicitar()
@@ -76,27 +73,9 @@ class Administrador(Usuario):
                 nodo_actual.data.contrasena = nueva_contrasena
                 break
             nodo_actual = nodo_actual.next
-
-        """nodo_actual = carga.lista_investigadores.first()
-        while nodo_actual:
-            datos = nodo_actual.data
-            if datos.getId() == str(cedula):
-                nodo_actual.data.contrasena = nueva_contrasena
-                break
-            nodo_actual = nodo_actual.next
-
-        nodo_actual = carga.lista_administradores.first()
-        while nodo_actual:
-            datos = nodo_actual.data
-            if datos.getId() == str(cedula):
-                nodo_actual.data.contrasena = nueva_contrasena
-                break
-            nodo_actual = nodo_actual.next"""
-    
     
     def crear_equipo_solicitado(numero_placa):
         """Crea el objeto equipo solicitado y lo retorna"""
-        "lista_equipos_solicitados = DoubleList()"
         with open("Practica_1/solicitudes_agregar.txt", "r") as file:
                 lineas = file.readlines()
                 for linea in lineas:
@@ -134,6 +113,7 @@ class Administrador(Usuario):
                     mes_compra = datos[5]
                     anio_compra = datos[6]
                     valor_precio = datos[7]
+                    hora_actual = datetime.now().strftime("%H %M %S") + f".{datetime.now().microsecond}"
 
                     decision = input(f"{linea}\n¿Tomar decisión? (s/n): ").lower()
                     if decision == "s":
@@ -142,30 +122,37 @@ class Administrador(Usuario):
                         carga.carga_equipos_existentes()
                         try:
                             with open("Practica_1/Control_de_cambios.txt", "a") as file:
-                                file.write("{} {} {}\n".format(datos[1], datos[3], "agregar", datos[4])) 
-                                print( "escrito exitosamente en el control de cambios")
+                                file.write("{} {} {} {} {} {} {} {}\n".format(cedula_solicitante, numero_placa, "agregar", dia_compra, mes_compra, anio_compra, hora_actual,"Aprobada")) 
                         except:
                             print("No se pudo escribir en control de cambios el agregar")
                     else:
-                        nodo_actual = carga.lista_investigadores.first()
-                        while nodo_actual:
-                            if nodo_actual.data.Id == str(datos[1]):
-                                nodo_actual.data.solicitudes["agregar_equipo: {}".format(datos[3])] = 'rechazada'
-                                break
-                            nodo_actual = nodo_actual.next
+                        try:
+                            with open("Practica_1/Control_de_cambios.txt", "a") as file:
+                                file.write("{} {} {} {} {} {} {} {}\n".format(cedula_solicitante, numero_placa, "agregar", dia_compra, mes_compra, anio_compra, hora_actual,"Rechazada")) 
+                        except:
+                            print("No se pudo escribir en control de cambios el agregar")
+                
                 Administrador.eliminar_lineas("Practica_1/solicitudes_agregar.txt")
+                carga.carga_solicitudes_existentes()
         except FileNotFoundError:
             print("Error: El archivo no existe.")
 
 
     def visualizar_solicitudes_eliminar(self):
         from Practica_1.carga_archivos import carga
+        
         try:
             with open("Practica_1/solicitudes_eliminar.txt", "r") as file:
                 lineas = file.readlines()
                 for linea in lineas:
                     datos = linea.strip().split()
                     numero_placa = datos[3]
+                    cedula_solicitante = datos[1]
+                    numero_placa = datos[3]
+                    dia_compra = datos[4]
+                    mes_compra = datos[5]
+                    anio_compra = datos[6]
+                    hora_actual = datetime.now().strftime("%H %M %S") + f".{datetime.now().microsecond}"
                     decision = input(f"{linea}\n¿Tomar decisión? (s/n): ").lower()
                     if decision == "s":
                         with open("Practica_1/InventarioGeneral.txt", "r") as file:
@@ -177,18 +164,17 @@ class Administrador(Usuario):
                         carga.carga_equipos_existentes()
                         try:
                             with open("Practica_1/Control_de_cambios.txt", "a") as file:
-                                file.write("{} {} {}\n".format(datos[1], datos[3], "Eliminar", datos[4])) 
-                                print( "escrito exitosamente en el control de cambios")
+                                file.write("{} {} {} {} {} {} {} {}\n".format(cedula_solicitante, numero_placa, "eliminar", dia_compra, mes_compra, anio_compra, hora_actual,"Aprobada")) 
                         except:
                             print("No se pudo escribir en control de cambios el eliminar")
                     else:
-                        nodo_actual = carga.lista_investigadores.first()
-                        while nodo_actual:
-                            if nodo_actual.data.Id == str(datos[1]):
-                                nodo_actual.data.solicitudes["eliminar_equipo: {}".format(datos[3])] = 'rechazada'
-                                break
-                            nodo_actual = nodo_actual.next
+                        try:
+                            with open("Practica_1/Control_de_cambios.txt", "a") as file:
+                                file.write("{} {} {} {} {} {} {} {}\n".format(cedula_solicitante, numero_placa, "eliminar", dia_compra, mes_compra, anio_compra, hora_actual,"Rechazada")) 
+                        except:
+                            print("No se pudo escribir en control de cambios el eliminar")
                 Administrador.eliminar_lineas("Practica_1/solicitudes_eliminar.txt")
+                carga.carga_solicitudes_existentes()
         except FileNotFoundError:
             print("Error: El archivo no existe.")
     
@@ -239,9 +225,6 @@ class Administrador(Usuario):
         print(self.equipos)
         return
 
-
-    def generar_control_de_cambios(self):
-        return 
     
     def generar_txt_solicitudes_agregar(self):
         return

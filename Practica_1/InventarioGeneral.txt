@@ -54,3 +54,8 @@ Tatiana-Ramirez 2345934 SILLA_GIRATORIA 50661216 4 5 2010 174900
 Tatiana-Ramirez 2345934 SILLA_GIRATORIA 50661217 4 5 2010 174900
 Tatiana-Ramirez 2345934 SILLA_GIRATORIA 50661218 4 5 2010 174900Juan-Perez 24567898
 Manuela 65432178 eeeeee eeeeee eeeeee eeeeee eeeeee eeeeee
+Pedro-Gomez 1075689 nombre_equipo_prueba numero_placa123 dia_compra_12 mes_compra_12 anio_compra_12 valor_compra123
+Pedro-Gomez 1075689 prueba_nombre_equipo prueba_placa_123 prueba_dia prueba_mes prueba_anio prueba_valor_compra
+Juan-Perez 24567898 prueba prueba123 27 3 2003 45000
+Juan-Perez 24567898 equipo_prueba 1234 12 12 12 2345677
+Juan-Perez 24567898 prueba_nombre 9090 23 2 2003 7800000
