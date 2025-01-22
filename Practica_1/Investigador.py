@@ -58,23 +58,15 @@ class Investigador(Usuario):
         carga.carga_solicitudes_existentes()
     
     def escribir_inventario_en_txt(self):
-        ruta_archivo = "{}.txt".format(self.getNombre())
+        ruta_archivo = "Practica_1/{}_inventario.txt".format(self.getNombre())
         try:
-            objetos_unicos = set()
-            nodo_actual = self.equipos.first()
-            while nodo_actual:
-                objetos_unicos.add(str(nodo_actual.data))  
-                nodo_actual = nodo_actual.next
-
-            with open(ruta_archivo, "w", encoding="utf-8") as archivo:
-                for obj in objetos_unicos:
-                    archivo.write(obj + "\n")
-
+            with open(ruta_archivo, "w", encoding="utf-8") as archivo:    
+                archivo.write(str(self.equipos))
         except Exception as e:
             print(f"Error al escribir en el archivo: {e}")
 
     def escribir_solicitudes_en_txt(self):
-        ruta_archivo = "{}.txt".format(self.getNombre())
+        ruta_archivo = "Practica_1/{}_solicitudes.txt".format(self.getNombre())
         try:
             with open(ruta_archivo, "w", encoding="utf-8") as archivo:    
                 archivo.write(str(self.solicitudes))

@@ -291,7 +291,7 @@ class carga:
                         cedula = datos[0]
                         numero_placa = datos[1]
                         tipo_solicitud = datos[2]
-                        estado = datos[7]
+                        estado = datos[9]
                         solicitud = Solicitud(tipo_solicitud, numero_placa, estado)
                         
                         

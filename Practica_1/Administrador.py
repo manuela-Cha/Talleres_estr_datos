@@ -181,10 +181,10 @@ class Administrador(Usuario):
     def generar_txt_inventario_investigador(self):
         from Practica_1.carga_archivos import carga
         id_investigador = input("Ingrese la cedula del investigador: ")
-        nodo_actual = carga.lista_investigadores.first()
+        nodo_actual = carga.lista_investigadores_y_administradores.first()
         while nodo_actual:
             if nodo_actual.data.Id == str(id_investigador):
-                ruta_archivo = "{}-desdeAdmin.txt".format(nodo_actual.data.getNombre())
+                ruta_archivo = "Practica_1/{}_inventario-desdeAdmin.txt".format(nodo_actual.data.getNombre())
                 with open(ruta_archivo, "w", encoding="utf-8") as archivo:    
                     archivo.write(str(nodo_actual.data.equipos))
                 break
@@ -192,16 +192,6 @@ class Administrador(Usuario):
         return
     
     def generar_txt_inventario_general(self ):
-        from Practica_1.carga_archivos import carga
-        id_investigador = input("Ingrese la cedula del investigador: ")
-        nodo_actual = carga.lista_investigadores.first()
-        while nodo_actual:
-            if nodo_actual.data.Id == str(id_investigador):
-                ruta_archivo = "{}-desdeAdmin.txt".format(nodo_actual.data.getNombre())
-                with open(ruta_archivo, "w", encoding="utf-8") as archivo:    
-                    archivo.write(str(nodo_actual.data.equipos))
-                break
-            nodo_actual = nodo_actual.next
         return
     
     def agregar_un_equipo_al_inventario(self):
@@ -224,13 +214,9 @@ class Administrador(Usuario):
     def mostrar_equipos(self):
         print(self.equipos)
         return
-
-    
-    def generar_txt_solicitudes_agregar(self):
-        return
-    
-    def generar_txt_solicitudes_eliminar(self):
-        return
+        
+    def consultar_estado_solicitudes(self):
+        print(self.solicitudes)
     
     def __str__(self):
         return f"{self.nombre} {self.Id} {self.fecha_nacimiento} {self.ciudad_nacimiento} {self.tel} {self.email} {self.dir} {self.contrasena}\n"
