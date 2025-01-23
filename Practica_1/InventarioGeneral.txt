@@ -59,3 +59,6 @@ Pedro-Gomez 1075689 prueba_nombre_equipo prueba_placa_123 prueba_dia prueba_mes 
 Juan-Perez 24567898 prueba prueba123 27 3 2003 45000
 Juan-Perez 24567898 equipo_prueba 1234 12 12 12 2345677
 Juan-Perez 24567898 prueba_nombre 9090 23 2 2003 7800000
+usuario_prueba 123498 equipo1 1 21 12 2003 2098000
+usuario_prueba 123498 equipo2 2 12 11 1209 100023
+usuario_prueba 123498 equipo3 3 12 12 12 20345

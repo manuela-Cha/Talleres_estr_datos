@@ -5,3 +5,4 @@ Pedro-Gomez 1075689 20 02 1990 Popayan 3003012323 pedrogomez@edl.edu.co kr23 8-1
 Tatiana-Ramirez 2345934 15 11 1982 Medellin 3004567890 tatianaramirez@edl.edu.co cll5 4S-69 Poblado Medellin UrbColina 1023
 matiux 1234567678 7 8 2004 3026502748 matiux@unal.edu.co calle 25 No 12-54
 Manuela 65432178 27 07 2003 3026502748 manuelachaverra@unal.edu.co calle 12 numero 58-23
+usuario_prueba 123498 27 07 2003 31023443 manuela_Cha@unal.edu.co calle 23 numero 31-12

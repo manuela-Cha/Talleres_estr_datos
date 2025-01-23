@@ -316,3 +316,83 @@ class carga:
                 if not esta_archivo_vacio("Practica_1/Control_de_cambios.txt"):
                     procesar_control_cambios()
                 
+    def merge_sort_double_list_equipos(double_list):
+        """
+        Ordena una DoubleList de objetos Equipo utilizando Merge Sort,
+        basado en el atributo numero_placa de cada objeto.
+        """
+
+        def split_list(head):
+            """Divide la lista en dos mitades y retorna los nodos iniciales de cada mitad."""
+            slow = head
+            fast = head
+
+            while fast.next and fast.next.next:
+                slow = slow.next
+                fast = fast.next.next
+
+            middle = slow
+            second_half = middle.next
+            middle.next = None  # Divide la lista en dos partes
+            if second_half:
+                second_half.prev = None  # Rompe el enlace anterior
+
+            return head, second_half
+
+        def merge_sorted_lists(first, second):
+            """Fusiona dos sublistas ordenadas y retorna la cabeza de la nueva lista."""
+            if not first:
+                return second
+            if not second:
+                return first
+
+            if first.data.get_numero_placa() <= second.data.get_numero_placa():
+                merged_head = first
+                merged_head.next = merge_sorted_lists(first.next, second)
+                if merged_head.next:  # Establece el puntero `prev` del siguiente nodo
+                    merged_head.next.prev = merged_head
+            else:
+                merged_head = second
+                merged_head.next = merge_sorted_lists(first, second.next)
+                if merged_head.next:  # Establece el puntero `prev` del siguiente nodo
+                    merged_head.next.prev = merged_head
+
+            return merged_head
+
+        def merge_sort(head):
+            """Aplica Merge Sort a partir de un nodo cabeza y retorna la cabeza de la lista ordenada."""
+            if not head or not head.next:
+                return head
+
+            first_half, second_half = split_list(head)
+            sorted_first = merge_sort(first_half)
+            sorted_second = merge_sort(second_half)
+
+            return merge_sorted_lists(sorted_first, sorted_second)
+
+        # Si la lista está vacía o tiene solo un nodo, no es necesario ordenar
+        if double_list.isEmpty() or double_list.size == 1:
+            return
+
+        # Ordenar la lista
+        double_list.head = merge_sort(double_list.head)
+
+        # Actualizar el tail de la lista
+        current = double_list.head
+        while current.next:
+            current = current.next
+        double_list.tail = current
+
+
+    def ordenar_equipos_usuarios(lista_usuarios):
+        """
+        Ordena los equipos de cada usuario en una lista de usuarios de tipo DoubleList.
+        """
+        current_usuario = lista_usuarios.first()  # Obtén el primer nodo de la lista de usuarios
+        while current_usuario:
+            # Obtén la lista de equipos del usuario actual
+            equipos = current_usuario.data.getEquipos()
+            # Ordena la lista de equipos utilizando Merge Sort
+            carga.merge_sort_double_list_equipos(equipos)
+            current_usuario = current_usuario.next  # Pasa al siguiente usuario
+

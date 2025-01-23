@@ -16,6 +16,9 @@ class Administrador(Usuario):
         self.dir = dir
         self.equipos = DoubleList()
 
+    def getEquipos(self):
+        return self.equipos
+
     def registrar_nuevo_usuario(self):
         from Practica_1.carga_archivos import carga
         usuario_agregado = Usuario.solicitar()
@@ -177,10 +180,12 @@ class Administrador(Usuario):
                 carga.carga_solicitudes_existentes()
         except FileNotFoundError:
             print("Error: El archivo no existe.")
+
     
     def generar_txt_inventario_investigador(self):
         from Practica_1.carga_archivos import carga
         id_investigador = input("Ingrese la cedula del investigador: ")
+        carga.ordenar_equipos_usuarios(carga.lista_investigadores_y_administradores)
         nodo_actual = carga.lista_investigadores_y_administradores.first()
         while nodo_actual:
             if nodo_actual.data.Id == str(id_investigador):
@@ -190,9 +195,7 @@ class Administrador(Usuario):
                 break
             nodo_actual = nodo_actual.next
         return
-    
-    def generar_txt_inventario_general(self ):
-        return
+
     
     def agregar_un_equipo_al_inventario(self):
         """Agrega un equipo al inventario"""

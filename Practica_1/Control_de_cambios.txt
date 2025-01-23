@@ -1,3 +1,6 @@
 24567898 lol agregar lol lol lol 22 04 01.999677 Aprobada
 24567898 lol eliminar lol lol lol 22 15 33.846605 Aprobada
 24567898 9090 eliminar 23 2 2003 21 13 39.65280 Rechazada
+123498 1 agregar 21 12 2003 10 36 01.840277 Aprobada
+123498 2 agregar 12 11 1209 10 36 14.905315 Aprobada
+123498 3 agregar 12 12 12 10 36 18.428157 Aprobada
