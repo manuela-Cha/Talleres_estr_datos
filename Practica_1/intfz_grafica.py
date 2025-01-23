@@ -96,13 +96,13 @@ class intfz_grafica:
                     try:
                         respuesta = input("Ingrese el número de la acción deseada: ")
                         if respuesta == "1":
-                            admin.registrar_nuevo_usuario()  # Lista A MAS NO PODER
+                            admin.registrar_nuevo_usuario()
                         elif respuesta == "2":
-                            admin.eliminar_usuario()  # Lista A MAS NO PODER
+                            admin.eliminar_usuario()
                         elif respuesta == "3":
-                            admin.cambiar_contrasena()  # Lista A MAS NO PODER
+                            admin.cambiar_contrasena()
                         elif respuesta == "4":
-                            admin.visualizar_solicitudes_agregar() #LISTA
+                            admin.visualizar_solicitudes_agregar()
                         elif respuesta == "5":
                             admin.generar_txt_inventario_investigador()
                         elif respuesta == "6":

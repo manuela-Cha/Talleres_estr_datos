@@ -370,14 +370,11 @@ class carga:
 
             return merge_sorted_lists(sorted_first, sorted_second)
 
-        # Si la lista está vacía o tiene solo un nodo, no es necesario ordenar
         if double_list.isEmpty() or double_list.size == 1:
             return
 
-        # Ordenar la lista
         double_list.head = merge_sort(double_list.head)
 
-        # Actualizar el tail de la lista
         current = double_list.head
         while current.next:
             current = current.next
