@@ -2,6 +2,8 @@ from Laboratorio_no_2.Usuario import Usuario
 from Laboratorio_no_4.Lista_doble import DoubleList
 from Practica_1.Equipo import Equipo
 from datetime import datetime
+from Practica_1.carga_archivos import carga
+from Practica_1.Factory_usuarios import Factory_Admins
 
 class Administrador(Usuario):
     
@@ -20,7 +22,7 @@ class Administrador(Usuario):
         return self.equipos
 
     def registrar_nuevo_usuario(self):
-        from Practica_1.carga_archivos import carga
+        "from Practica_1.carga_archivos import carga"
         usuario_agregado = Usuario.solicitar()
         try:
             with open("Practica_1/Password.txt", "a") as file:

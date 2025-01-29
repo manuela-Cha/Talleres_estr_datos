@@ -4,6 +4,8 @@ from Practica_1.Administrador import Administrador
 from Practica_1.Investigador import Investigador
 from Laboratorio_no_2.Fecha import Fecha
 from Practica_1.Solicitud import Solicitud
+from Practica_1.Equipo import Equipo
+
 class carga:
     lista_investigadores_y_administradores = DoubleList()
     lista_investigadores = DoubleList()
@@ -113,9 +115,7 @@ class carga:
                         
 
     def inicializar_empleado():
-        from Practica_1.Administrador import Administrador
-        from Practica_1.Investigador import Investigador
-        """Inicializa el nuevo empleado y lo agrega a la lista correspondiente."""
+        "Inicializa el nuevo empleado y lo agrega a la lista correspondiente."
         try:
            
             with open("Practica_1/Empleados.txt", 'rb') as file:
@@ -156,8 +156,6 @@ class carga:
             print(f"Error: {e}")
 
     def carga_empleados_existentes():
-        from Practica_1.Administrador import Administrador
-        from Practica_1.Investigador import Investigador
         """Inicializa los empleados y los agrega a las listas correspondientes."""
         try:
             with open("Practica_1/Empleados.txt", 'rb') as file:
@@ -192,7 +190,7 @@ class carga:
                                     carga.lista_administradores.addLast(obj)
                                 else:
                                     print(f"Rol del empleado con cédula {cedula} no identificado.")
-                                break  # Salir del bucle de Password.txt una vez encontrado el rol
+                                break  
                         else:
                             print(f"No se encontró cédula {cedula} en Password.txt.")
         except FileNotFoundError as e:
@@ -200,7 +198,6 @@ class carga:
 
     def carga_equipos_existentes():
         """carga los equipos y los agrega a quien sea debido"""
-        from Practica_1.Equipo import Equipo
         try:
             with open("Practica_1/InventarioGeneral.txt", 'r', encoding='utf-8') as file:
                 for linea in file:
