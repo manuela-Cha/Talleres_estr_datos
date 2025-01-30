@@ -2,6 +2,7 @@
 from Laboratorio_no_2.Usuario import Usuario
 from Laboratorio_no_4.Lista_doble import DoubleList
 from Practica_1.Equipo import Equipo
+from Practica_1.carga_archivos import carga
 
 class Investigador(Usuario):
     def __init__(self, contrasena, nombre, Id, fecha_nacimiento, ciudad_nacimiento, tel, email, dir):
@@ -36,14 +37,14 @@ class Investigador(Usuario):
         print(self.equipos)
          
     def solicitar_agregar_equipo(self):
-        from Practica_1.carga_archivos import carga
+        "from Practica_1.carga_archivos import carga"
         equipo = Equipo.crear_equipo()
         with open("Practica_1/solicitudes_agregar.txt", "a") as archivo:  
             archivo.write("{} {} {} {} {} {} {} {}\n".format(self.getNombre(), self.Id, equipo.get_nombre(), equipo.get_numero_placa(), equipo.get_fecha_compra().getDia(), equipo.get_fecha_compra().getMes(), equipo.get_fecha_compra().getAño(), equipo.get_valor_compra() ))
         carga.carga_solicitudes_existentes()
     
     def solicitar_eliminar_equipo(self):
-        from Practica_1.carga_archivos import carga
+        "from Practica_1.carga_archivos import carga"
         print(self.equipos)
         numero_placa_eliminar = input("Escriba el numero de placa del equipo que desea eliminar: ")
         nodo_actual = self.equipos.first()

@@ -3,7 +3,7 @@ from Laboratorio_no_4.Lista_doble import DoubleList
 from Practica_1.Equipo import Equipo
 from datetime import datetime
 from Practica_1.carga_archivos import carga
-from Practica_1.Factory_usuarios import Factory_Admins
+
 
 class Administrador(Usuario):
     
@@ -42,14 +42,14 @@ class Administrador(Usuario):
 
     # LISTA A MAS NO PODER
     def eliminar_usuario(self):
-        from Practica_1.carga_archivos import carga
+        "from Practica_1.carga_archivos import carga"
         cedula = input("Ingrese el número de cédula del usuario que desea eliminar: ")
         carga.eliminar_usuario_Password_datos(cedula)
         carga.eliminar_usuario_de_txt(cedula)
         
     #LISTA A MAS NO PODER
     def cambiar_contrasena(self):
-        from Practica_1.carga_archivos import carga
+        "from Practica_1.carga_archivos import carga"
         cedula = input("Ingrese el número de cédula del usuario que desea cambiar su contraseña: ")
         nueva_contrasena = input("Ingrese la contraseña nueva: ")
         try:
@@ -104,7 +104,7 @@ class Administrador(Usuario):
             
 
     def visualizar_solicitudes_agregar(self):
-        from Practica_1.carga_archivos import carga
+        "from Practica_1.carga_archivos import carga"
         try:
             with open("Practica_1/solicitudes_agregar.txt", "r") as file:
                 lineas = file.readlines()
@@ -144,7 +144,7 @@ class Administrador(Usuario):
 
 
     def visualizar_solicitudes_eliminar(self):
-        from Practica_1.carga_archivos import carga
+        "from Practica_1.carga_archivos import carga"
         
         try:
             with open("Practica_1/solicitudes_eliminar.txt", "r") as file:
@@ -185,7 +185,7 @@ class Administrador(Usuario):
 
     
     def generar_txt_inventario_investigador(self):
-        from Practica_1.carga_archivos import carga
+        "from Practica_1.carga_archivos import carga"
         id_investigador = input("Ingrese la cedula del investigador: ")
         carga.ordenar_equipos_usuarios(carga.lista_investigadores_y_administradores)
         nodo_actual = carga.lista_investigadores_y_administradores.first()
@@ -201,7 +201,7 @@ class Administrador(Usuario):
     
     def agregar_un_equipo_al_inventario(self):
         """Agrega un equipo al inventario"""
-        from Practica_1.carga_archivos import carga
+        "from Practica_1.carga_archivos import carga"
         
         nombre_solicitante = self.nombre
         cedula_solicitante = self.Id
