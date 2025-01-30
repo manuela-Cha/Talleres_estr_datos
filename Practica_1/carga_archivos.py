@@ -5,6 +5,7 @@ from Practica_1.Investigador import Investigador
 from Laboratorio_no_2.Fecha import Fecha
 from Practica_1.Solicitud import Solicitud
 from Practica_1.Equipo import Equipo
+from Practica_1.Factory_usuarios import Factory_Usuario
 
 class carga:
     lista_investigadores_y_administradores = DoubleList()
@@ -142,7 +143,7 @@ class carga:
                         rol = datos[2]
 
                         if rol == "investigador":
-                            obj = Investigador(datos[1], *datos_empleado)
+                            "obj = Investigador(datos[1], *datos_empleado)"
                             carga.lista_investigadores_y_administradores.addLast(obj)
                             carga.lista_investigadores.addLast(obj)
                         elif rol == "administrador":
@@ -181,11 +182,13 @@ class carga:
                             if datos_password[0] == cedula:
                                 rol = datos_password[2]
                                 if rol == "investigador":
-                                    obj = Investigador(datos_password[1], *datos_empleado)
+                                    obj = Factory_Usuario.crear_usuario("investigador", *datos_empleado)
+                                    "obj = Investigador(datos_password[1], *datos_empleado)"
                                     carga.lista_investigadores_y_administradores.addLast(obj)
                                     carga.lista_investigadores.addLast(obj)
                                 elif rol == "administrador":
-                                    obj = Administrador(datos_password[1], *datos_empleado)
+                                    "obj = Administrador(datos_password[1], *datos_empleado)"
+                                    # obj = Factory_Usuario.crear_usuario("administrador", *datos_empleado)
                                     carga.lista_investigadores_y_administradores.addLast(obj)
                                     carga.lista_administradores.addLast(obj)
                                 else:
