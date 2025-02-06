@@ -1,4 +1,4 @@
-from Laboratorio_no_6.Actividad_1 import HEAP
+from Laboratorio_no_7.Actividad_1 import HEAP
 class PriorityQueue:
     def __init__(self, capacity):
         """
