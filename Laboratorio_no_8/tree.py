@@ -1,161 +1,172 @@
-class BSTEntry:
-    def __init__(self, key, value):
-        self.key = key
-        self.value = value
-        
+class Node:
+    def __init__(self, name: str, id_number: int):
+        self._name = name
+        self._id_number = id_number
+        self._key = sum(int(digit) for digit in str(id_number))  
+        self._left = None
+        self._right = None
+    
+    @property
+    def name(self):
+        return self._name
+    
+    @property
+    def id_number(self):
+        return self._id_number
+    
+    @property
+    def key(self):
+        return self._key
+    
+    @property
+    def left(self):
+        return self._left
+    
+    @left.setter
+    def left(self, left):
+        self._left = left
+    
+    @property
+    def right(self):
+        return self._right
+    
+    @right.setter
+    def right(self, right):
+        self._right = right
+    
     def __str__(self):
-        return f"Clave: {self.key}, Valor: {self.value}"
+        return f"Nombre: {self._name}, ID: {self._id_number}, Clave: {self._key}"
 
 class BinaryTree:
     def __init__(self):
-        self.root = None
-        self.left = None
-        self.right = None
-        self.entry = None
-        
-    def is_empty(self):
-        return self.root is None
+        self._root = None
+        self._size = 0
+    
+    def is_empty(self) -> bool:
+        return self._root is None
+    
+    def size(self) -> int:
+        return self._size
+    
+    def root(self) -> Node:
+        return self._root
+    
+    def left(self, v: Node) -> Node:
+        return v.left if v else None
+    
+    def right(self, v: Node) -> Node:
+        return v.right if v else None
+    
+    def depth(self, v: Node) -> int:
+        if not v:
+            return -1
+        return 1 + max(self.depth(v.left), self.depth(v.right))
+    
+    def height(self) -> int:
+        return self.depth(self._root)
+    
+    def has_left(self, v: Node) -> bool:
+        return v.left is not None if v else False
+    
+    def has_right(self, v: Node) -> bool:
+        return v.right is not None if v else False
 
 class BinarySearchTree(BinaryTree):
     def __init__(self):
         super().__init__()
-        
-    def insert(self, key, value):
-        entry = BSTEntry(key, value)
-        if self.is_empty():
-            self.root = BinarySearchTree()
-            self.root.entry = entry
-            return
-            
-        if key <= self.root.entry.key:
-            if self.root.left is None:
-                self.root.left = BinarySearchTree()
-                self.root.left.root = BinarySearchTree()
-                self.root.left.root.entry = entry
-            else:
-                self.root.left.insert(key, value)
-        else:
-            if self.root.right is None:
-                self.root.right = BinarySearchTree()
-                self.root.right.root = BinarySearchTree()
-                self.root.right.root.entry = entry
-            else:
-                self.root.right.insert(key, value)
     
-    def find(self, key):
-        if self.is_empty():
+    def find(self, k: int) -> Node:
+        return self._find_helper(self._root, k)
+    
+    def _find_helper(self, node: Node, k: int) -> Node:
+        if not node:
             return None
-            
-        if self.root.entry.key == key:
-            return self.root.entry
-            
-        if key < self.root.entry.key and self.root.left:
-            return self.root.left.find(key)
-        elif key > self.root.entry.key and self.root.right:
-            return self.root.right.find(key)
-            
-        return None
-        
-    def find_min(self):
-        if self.is_empty():
-            return None
-            
-        current = self
-        while current.root.left:
-            current = current.root.left
-        return current.root.entry
-        
-    def find_max(self):
-        if self.is_empty():
-            return None
-            
-        current = self
-        while current.root.right:
-            current = current.root.right
-        return current.root.entry
-        
-    def delete(self, key):
-        if self.is_empty():
-            return self
-            
-        if key < self.root.entry.key:
-            if self.root.left:
-                self.root.left = self.root.left.delete(key)
-        elif key > self.root.entry.key:
-            if self.root.right:
-                self.root.right = self.root.right.delete(key)
+        if k == node.key:
+            return node
+        if k < node.key:
+            return self._find_helper(node.left, k)
         else:
-            if not self.root.left and not self.root.right:
-                return None
-            elif not self.root.left:
-                return self.root.right
-            elif not self.root.right:
-                return self.root.left
+            return self._find_helper(node.right, k)
+    
+    def insert(self, name: str, id_number: int) -> None:
+        new_node = Node(name, id_number)
+        if self.is_empty():
+            self._root = new_node
+            self._size = 1
+            return
+        self._insert_helper(self._root, new_node)
+    
+    def _insert_helper(self, current: Node, new_node: Node) -> None:
+        if new_node.key < current.key:
+            if not current.left:
+                current.left = new_node
+                self._size += 1
             else:
-                min_node = self.root.right.find_min()
-                self.root.entry = min_node
-                self.root.right = self.root.right.delete(min_node.key)
-                
-        return self
-        
+                self._insert_helper(current.left, new_node)
+        else:
+            if not current.right:
+                current.right = new_node
+                self._size += 1
+            else:
+                self._insert_helper(current.right, new_node)
+    
     def inorder_traversal(self):
         result = []
-        if not self.is_empty():
-            if self.root.left:
-                result.extend(self.root.left.inorder_traversal())
-            result.append(str(self.root.entry))
-            if self.root.right:
-                result.extend(self.root.right.inorder_traversal())
+        self._inorder_helper(self._root, result)
         return result
-        
-    def display(self, level=0, prefix="Raiz: "):
-        if self.is_empty():
+    
+    def _inorder_helper(self, node: Node, result: list):
+        if node:
+            self._inorder_helper(node.left, result)
+            result.append(str(node))
+            self._inorder_helper(node.right, result)
+    
+    def display(self):
+        return self._display_helper(self._root, "", True)
+    
+    def _display_helper(self, node: Node, prefix: str, is_left: bool) -> str:
+        if not node:
             return ""
+        
+        result = prefix
+        result += "I-- " if is_left else "D-- "
+        result += str(node) + "\n"
+        
+        if node.left:
+            result += self._display_helper(node.left, prefix + ("|   " if not is_left else "    "), True)
+        if node.right:
+            result += self._display_helper(node.right, prefix + ("|   " if not is_left else "    "), False)
             
-        ret = "  " * level + prefix + str(self.root.entry) + "\n"
-        if self.root.left:
-            ret += self.root.left.display(level + 1, "I--- ")
-        if self.root.right:
-            ret += self.root.right.display(level + 1, "D--- ")
-        return ret
+        return result
 
-def sum_digits(number):
-    return sum(int(digit) for digit in str(number))
-
-def test_bst():
+def test_binary_search_tree():
     bst = BinarySearchTree()
     
-    test_data = [
-        ("Juan", 10101013),
-        ("Pablo", 10001011),
-        ("Maria", 10101015),
-        ("Ana", 1010000),
-        ("Diana", 10111105),
-        ("Mateo", 10110005)
+    datos = [
+        ("Juan", 10101013),   # k=7
+        ("Pablo", 10001011),  # k=4
+        ("Maria", 10101015),  # k=9
+        ("Ana", 1010000),     # k=2
+        ("Diana", 10111105),  # k=10
+        ("Mateo", 10110005)   # k=8
     ]
     
-    for name, id_number in test_data:
-        key = sum_digits(id_number)
-        bst.insert(key, name)
-        
-    print("Binary Search Tree :")
+    print("Insertando datos...")
+    for nombre, id_numero in datos:
+        bst.insert(nombre, id_numero)
+        print(f"Insertado: {nombre} (ID: {id_numero}, Clave: {sum(int(d) for d in str(id_numero))})")
+    
+    print("\nEstructura del Arbol:")
     print(bst.display())
     
-    print("\nInorder:")
-    print(", ".join(bst.inorder_traversal()))
+    print("Recorrido Inorder (ordenado por clave):")
+    for node_str in bst.inorder_traversal():
+        print(node_str)
     
-    print("\nValor minimo:", bst.find_min())
-    print("Valor maximo:", bst.find_max())
-    
-    # Test search
-    search_key = 7  # Should find Juan
-    result = bst.find(search_key)
-    print(f"\nBuscando la clave {search_key}:", result)
-    
-    # Test deletion
-    print("\nEliminando la clave 7 (Juan)")
-    bst.delete(7)
-    print("\nArbol actualizado:")
-    print(bst.display())
+    clave_buscar = 7  # Debería encontrar a Juan
+    resultado = bst.find(clave_buscar)
+    print(f"\nBuscando clave {clave_buscar}:")
+    print(resultado if resultado else "No encontrado")
 
-test_bst()
+if __name__ == "__main__":
+    test_binary_search_tree()
