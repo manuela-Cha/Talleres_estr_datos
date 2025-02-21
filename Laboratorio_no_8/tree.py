@@ -1,164 +1,161 @@
 class BSTEntry:
-    def __init__(self, data, key):
-        self.data = data
+    def __init__(self, key, value):
         self.key = key
-    
+        self.value = value
+        
     def __str__(self):
-        return f"Key: {self.key}, Data: {self.data}"
+        return f"Clave: {self.key}, Valor: {self.value}"
 
-class Node:
-    def __init__(self, entry):
-        self.entry = entry
-        self.left = None
-        self.right = None
-
-class BinarySearchTree:
+class BinaryTree:
     def __init__(self):
         self.root = None
-    
-    def insert(self, data, key):
-        """Inserta un nuevo dato con su clave"""
-        entry = BSTEntry(data, key)
-        if not self.root:
-            self.root = Node(entry)
-        else:
-            self._insert_recursive(self.root, entry)
-    
-    def _insert_recursive(self, node, entry):
-        if entry.key < node.entry.key:
-            if node.left is None:
-                node.left = Node(entry)
+        self.left = None
+        self.right = None
+        self.entry = None
+        
+    def is_empty(self):
+        return self.root is None
+
+class BinarySearchTree(BinaryTree):
+    def __init__(self):
+        super().__init__()
+        
+    def insert(self, key, value):
+        entry = BSTEntry(key, value)
+        if self.is_empty():
+            self.root = BinarySearchTree()
+            self.root.entry = entry
+            return
+            
+        if key <= self.root.entry.key:
+            if self.root.left is None:
+                self.root.left = BinarySearchTree()
+                self.root.left.root = BinarySearchTree()
+                self.root.left.root.entry = entry
             else:
-                self._insert_recursive(node.left, entry)
+                self.root.left.insert(key, value)
         else:
-            if node.right is None:
-                node.right = Node(entry)
+            if self.root.right is None:
+                self.root.right = BinarySearchTree()
+                self.root.right.root = BinarySearchTree()
+                self.root.right.root.entry = entry
             else:
-                self._insert_recursive(node.right, entry)
+                self.root.right.insert(key, value)
     
     def find(self, key):
-        """Busca un nodo por su clave"""
-        return self._find_recursive(self.root, key)
-    
-    def _find_recursive(self, node, key):
-        if node is None or node.entry.key == key:
-            return node
-        if key < node.entry.key:
-            return self._find_recursive(node.left, key)
-        return self._find_recursive(node.right, key)
-    
-    def remove(self, key):
-        """Elimina un nodo por su clave"""
-        self.root = self._remove_recursive(self.root, key)
-    
-    def _remove_recursive(self, node, key):
-        if node is None:
+        if self.is_empty():
             return None
-        
-        if key < node.entry.key:
-            node.left = self._remove_recursive(node.left, key)
-        elif key > node.entry.key:
-            node.right = self._remove_recursive(node.right, key)
-        else:
-            # Nodo con un solo hijo o sin hijos
-            if node.left is None:
-                return node.right
-            elif node.right is None:
-                return node.left
             
-            # Nodo con dos hijos
-            min_node = self._find_min_node(node.right)
-            node.entry = min_node.entry
-            node.right = self._remove_recursive(node.right, min_node.entry.key)
+        if self.root.entry.key == key:
+            return self.root.entry
+            
+        if key < self.root.entry.key and self.root.left:
+            return self.root.left.find(key)
+        elif key > self.root.entry.key and self.root.right:
+            return self.root.right.find(key)
+            
+        return None
         
-        return node
-    
-    def find_max(self):
-        """Encuentra el valor máximo en el árbol"""
-        if not self.root:
-            return None
-        current = self.root
-        while current.right:
-            current = current.right
-        return current.entry
-    
     def find_min(self):
-        """Encuentra el valor mínimo en el árbol"""
-        if not self.root:
+        if self.is_empty():
             return None
-        return self._find_min_node(self.root).entry
-    
-    def _find_min_node(self, node):
-        current = node
-        while current.left:
-            current = current.left
-        return current
-    
-    def inorder(self):
-        """Realiza un recorrido inorder del árbol"""
-        print("Recorrido Inorder:")
-        self._inorder_recursive(self.root)
-        print()
-    
-    def _inorder_recursive(self, node):
-        if node:
-            self._inorder_recursive(node.left)
-            print(f"{node.entry.key} ({node.entry.data})", end=" ")
-            self._inorder_recursive(node.right)
-    
-    def print_tree(self):
-        """Imprime la estructura del árbol"""
-        print("Estructura del Arbol Binario de Busqueda:")
-        self._print_tree_recursive(self.root, "", True)
-    
-    def _print_tree_recursive(self, node, prefix, is_left):
-        if node:
-            print(prefix + ("|-- " if is_left else "`-- ") + 
-                  f"{node.entry.key} ({node.entry.data})")
-            self._print_tree_recursive(node.left, prefix + ("|   " if is_left else "    "), True)
-            self._print_tree_recursive(node.right, prefix + ("|   " if is_left else "    "), False)
+            
+        current = self
+        while current.root.left:
+            current = current.root.left
+        return current.root.entry
+        
+    def find_max(self):
+        if self.is_empty():
+            return None
+            
+        current = self
+        while current.root.right:
+            current = current.root.right
+        return current.root.entry
+        
+    def delete(self, key):
+        if self.is_empty():
+            return self
+            
+        if key < self.root.entry.key:
+            if self.root.left:
+                self.root.left = self.root.left.delete(key)
+        elif key > self.root.entry.key:
+            if self.root.right:
+                self.root.right = self.root.right.delete(key)
+        else:
+            if not self.root.left and not self.root.right:
+                return None
+            elif not self.root.left:
+                return self.root.right
+            elif not self.root.right:
+                return self.root.left
+            else:
+                min_node = self.root.right.find_min()
+                self.root.entry = min_node
+                self.root.right = self.root.right.delete(min_node.key)
+                
+        return self
+        
+    def inorder_traversal(self):
+        result = []
+        if not self.is_empty():
+            if self.root.left:
+                result.extend(self.root.left.inorder_traversal())
+            result.append(str(self.root.entry))
+            if self.root.right:
+                result.extend(self.root.right.inorder_traversal())
+        return result
+        
+    def display(self, level=0, prefix="Raiz: "):
+        if self.is_empty():
+            return ""
+            
+        ret = "  " * level + prefix + str(self.root.entry) + "\n"
+        if self.root.left:
+            ret += self.root.left.display(level + 1, "I--- ")
+        if self.root.right:
+            ret += self.root.right.display(level + 1, "D--- ")
+        return ret
+
+def sum_digits(number):
+    return sum(int(digit) for digit in str(number))
 
 def test_bst():
     bst = BinarySearchTree()
     
-    # Insertar los datos de prueba
     test_data = [
-        ("Juan", 7),    # 10101013
-        ("Pablo", 4),   # 10001011
-        ("Maria", 9),   # 10101015
-        ("Ana", 2),     # 1010000
-        ("Diana", 10),  # 10111105
-        ("Mateo", 8),   # 10110005
+        ("Juan", 10101013),
+        ("Pablo", 10001011),
+        ("Maria", 10101015),
+        ("Ana", 1010000),
+        ("Diana", 10111105),
+        ("Mateo", 10110005)
     ]
     
-    for nombre, key in test_data:
-        bst.insert(nombre, key)
+    for name, id_number in test_data:
+        key = sum_digits(id_number)
+        bst.insert(key, name)
+        
+    print("Binary Search Tree :")
+    print(bst.display())
     
-    # Mostrar la estructura del árbol
-    print("\nArbol inicial:")
-    bst.print_tree()
+    print("\nInorder:")
+    print(", ".join(bst.inorder_traversal()))
     
-    # Mostrar recorrido inorder
-    print("\nRecorrido inorder:")
-    bst.inorder()
+    print("\nValor minimo:", bst.find_min())
+    print("Valor maximo:", bst.find_max())
     
-    # Encontrar mínimo y máximo
-    min_entry = bst.find_min()
-    max_entry = bst.find_max()
-    print(f"\nValor minimo: {min_entry.key} ({min_entry.data})")
-    print(f"Valor maximo: {max_entry.key} ({max_entry.data})")
+    # Test search
+    search_key = 7  # Should find Juan
+    result = bst.find(search_key)
+    print(f"\nBuscando la clave {search_key}:", result)
     
-    # Buscar un valor
-    search_key = 7
-    found = bst.find(search_key)
-    print(f"\nBuscando clave {search_key}: {found.entry.data if found else 'No encontrado'}")
-    
-    # Eliminar un nodo
-    remove_key = 4
-    print(f"\nEliminando clave {remove_key} (Pablo)")
-    bst.remove(remove_key)
-    print("Arbol actualizado:")
-    bst.print_tree()
+    # Test deletion
+    print("\nEliminando la clave 7 (Juan)")
+    bst.delete(7)
+    print("\nArbol actualizado:")
+    print(bst.display())
 
-if __name__ == "__main__":
-    test_bst()
+test_bst()
